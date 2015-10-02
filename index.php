@@ -74,7 +74,7 @@
         <div class="row">
             <div class="col-sm-3 col-md-2 sidebar">
                 <ul class="nav nav-sidebar">
-                    <li <?php if (!isset($_GET["page"]) || $_GET["page"] == "summary-device") echo 'class="active"';?>><a href="?page=summary-device">สรุปยอดคงเหลือ</a></li>
+                    <li <?php if (!isset($_GET["page"]) || $_GET["page"] == "summary-device") echo 'class="active"';?>><a href="?page=summary-device">สรุปยอด</a></li>
                     <li <?php if ($_GET["page"] == "search-device") echo 'class="active"';?>><a href="?page=search-device">ค้นหาอุปกรณ์</a></li>
                     <li <?php if ($_GET["page"] == "add-device") echo 'class="active"';?>><a href="?page=add-device">เพิ่มอุปกรณ์</a></li>
                     <li <?php if ($_GET["page"] == "claim-device") echo 'class="active"';?>><a href="?page=claim-device">รายการส่งซ่อม</a></li>

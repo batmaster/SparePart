@@ -111,10 +111,11 @@
                     <table class="table table-bordered">
                         <thead>
                             <tr>
-                                <th>Date</th>
-                                <th>Number</th>
-                                <th>Location</th>
-                                <th>Type</th>
+                                <th>วันที่</th>
+                                <th>เลขที่หนังสือ</th>
+                                <th>สถานที่ส่งเคลม</th>
+                                <th>ประเภท</th>
+                                <th>หมายเหตุ</th>
                             </tr>
                         </thead>
                         <tbody id="table-body-modal">
@@ -212,13 +213,13 @@
             type: "POST",
             dataType: 'json',
             data: {
-                "function": "get_transactions",
+                "function": "get_transactions_for_sn",
                 "sn": sn
             }
         }).done(function(results) {
             $("#table-body-modal").empty();
             for (var i = 0; i < results.length; i++) {
-                $("#table-body-modal").append("<tr " + (results[i].type == 0 ? "class=\"info\"" : "class=\"success\"") + "><td>" + results[i].date + "</td><td>" + results[i].number + "</td><td>" + results[i].location + "</td><td>" + results[i].type + "</td></tr>");
+                $("#table-body-modal").append("<tr " + (results[i].type == 0 ? "class=\"info\"" : "class=\"success\"") + "><td>" + results[i].date + "</td><td>" + results[i].number + "</td><td>" + (results[i].location == null ? "" : results[i].location) + "</td><td>" + (results[i].type == 0 ? "ส่งเคลม" : "รับเข้า") + "</td><td>" + results[i].note + "</td></tr>");
             }
         });
     });

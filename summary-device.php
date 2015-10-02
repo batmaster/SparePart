@@ -1,4 +1,4 @@
-<h1 class="page-header">Summary</h1>
+<h1 class="page-header">ยอดในคลัง</h1>
 <h2 class="sub-header">แบ่งตามรุ่นบอร์ด</h2>
 <div class="row">
     <div class="panel panel-default">
@@ -11,7 +11,7 @@
                     <th>Amount</th>
                 </tr>
             </thead>
-            <tbody id="table-body-model">
+            <tbody id="table-body-model-instock">
 
             </tbody>
         </table>
@@ -29,7 +29,27 @@
                     <th>Amount</th>
                 </tr>
             </thead>
-            <tbody id="table-body-type">
+            <tbody id="table-body-type-instock">
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<h1 class="page-header">ยอดส่งเคลม</h1>
+<h2 class="sub-header">แบ่งตามรุ่นบอร์ด</h2>
+<div class="row">
+    <div class="panel panel-default">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Brand</th>
+                    <th>Model</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+            <tbody id="table-body-model-claiming">
 
             </tbody>
         </table>
@@ -47,13 +67,13 @@
                 "function": "count_by_model"
             }
         }).done(function(results) {
-            $("#table-body-model").empty();
+            $("#table-body-model-instock").empty();
             if (results.length == 0) {
-                $("#table-body-model").append("<tr><th></th><td>Not found!</td><td></td><td></td></tr>");
+                $("#table-body-model-instock").append("<tr><th></th><td>Not found!</td><td></td><td></td></tr>");
             }
             else {
                 for (var i = 0; i < results.length; i++) {
-                    $("#table-body-model").append("<tr><th>" + (i+1) + "</th><td>" + results[i].brand + "</td><td>" + results[i].model + "</td><td>" + results[i].amount + "</td></tr>");
+                    $("#table-body-model-instock").append("<tr><th>" + (i+1) + "</th><td>" + results[i].brand + "</td><td>" + results[i].model + "</td><td>" + results[i].amount + "</td></tr>");
                 }
             }
         });
@@ -68,11 +88,11 @@
         }).done(function(results) {
             $("#table-body-type").empty();
             if (results.length == 0) {
-                $("#table-body-type").append("<tr><th></th><td>Not found!</td><td></td></tr>");
+                $("#table-body-type-instock").append("<tr><th></th><td>Not found!</td><td></td></tr>");
             }
             else {
                 for (var i = 0; i < results.length; i++) {
-                    $("#table-body-type").append("<tr><th>" + (i+1) + "</th><td>" + results[i].type + "</td><td>" + results[i].amount + "</td></tr>");
+                    $("#table-body-type-instock").append("<tr><th>" + (i+1) + "</th><td>" + results[i].type + "</td><td>" + results[i].amount + "</td></tr>");
                 }
             }
         });

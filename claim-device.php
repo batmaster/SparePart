@@ -1,6 +1,6 @@
 <h1 class="page-header">Claim Devices</h1>
 <h2 class="sub-header">Section title</h2>
-<div class="row" id="form">
+<div class="row">
 
     <div class="form-group" id="form-sn">
         <label>S/N *</label>
@@ -84,9 +84,9 @@
         <button type="button" class="btn btn-success" id="submit-button">Submit</button>
     </div>
 
-
-
 </div>
+
+
 <script type="text/javascript">
 
     $(document).ready(function() {
@@ -102,10 +102,6 @@
         ?>
 
 	});
-
-    $("#brand-dropdown li").click(function() {
-        $("#brand text").text($(this).text());
-    });
 
     $("#sn").keyup(function() {
         $.ajax({
@@ -189,7 +185,6 @@
                 $("#sn-loading").show();
             },
             success: function(results) {
-                console.log(results[0].count);
                 if (results[0].count > 0) {
                     $.ajax({
                         url: 'db.php',
@@ -306,7 +301,7 @@
                     "model": $("#model").val(),
                     "date": $("#date").val(),
                     "number": $("#number").val(),
-                    "location": $("#location").val()
+                    "location": $("#location").val(),
                     "note": $("#note").val()
 
                 }
@@ -315,17 +310,7 @@
                 alert("น่าจะ ok");                  //ยืนยันการบันทึก
             });
         }
-
-
-
-
-
     });
 
 
 </script>
-
-
-
-
-</div>

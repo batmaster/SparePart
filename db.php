@@ -31,7 +31,7 @@ if (isset($_POST["function"])) {
         $sql = "INSERT INTO transaction (board_id, transaction_id, date, type, note) VALUES (
             (SELECT id FROM board WHERE  brand='$brand' AND model='$model' AND sn='$sn' AND type='$type'AND date='$date'AND number='$number'AND code='$code'),
             (SELECT id FROM retrieve WHERE number='$number' ORDER BY id DESC LIMIT 1),
-            NOW(), 1, '$note')";
+            '$date', 1, '$note')";
             mysql_query($sql);
             // echo $sql;
         }
@@ -78,7 +78,7 @@ if (isset($_POST["function"])) {
             $sql = "INSERT INTO transaction (board_id, transaction_id, date, type, note) VALUES (
                 (SELECT id FROM board WHERE  brand='$brand' AND model='$model' AND sn='$sn'),
                 (SELECT id FROM claim WHERE number='$number' AND location='$location' ORDER BY id DESC LIMIT 1),
-                NOW(), 0, '$note')";
+                '$date', 0, '$note')";
                 mysql_query($sql);
             }
             else if ($_POST["function"] == "retrieve") {
@@ -95,7 +95,7 @@ if (isset($_POST["function"])) {
                 $sql = "INSERT INTO transaction (board_id, transaction_id, date, type, note) VALUES (
                     (SELECT id FROM board WHERE  brand='$brand' AND model='$model' AND sn='$sn'),
                     (SELECT id FROM retrieve WHERE number='$number' ORDER BY id DESC LIMIT 1),
-                    NOW(), 1, '$note')";
+                    '$date', 1, '$note')";
                     mysql_query($sql);
                 }
                 else if ($_POST["function"] == "user") {
@@ -120,10 +120,10 @@ if (isset($_POST["function"])) {
                     }
                     echo json_encode($rows);
                 }
-                else if ($_POST["function"] == "get_transactions") {
+                else if ($_POST["function"] == "get_transactions_for_sn") {
                     $sn = $_POST["sn"];
 
-                    $sql = "SELECT c.id transaction_id, c.number, c.location, t.type, t.date FROM board b, transaction t, claim c WHERE b.sn='$sn' AND b.id=t.board_id AND c.id=t.transaction_id AND t.type=0 UNION ALL SELECT r.id transaction_id, r.number, null location, t.type, t.date FROM board b, transaction t, retrieve r WHERE b.sn='$sn' AND b.id=t.board_id AND r.id=t.transaction_id AND t.type=1";
+                    $sql = "SELECT * FROM (SELECT c.id transaction_id, c.number, c.location, t.type, t.date, t.note FROM board b, transaction t, claim c WHERE b.sn='$sn' AND b.id=t.board_id AND c.id=t.transaction_id AND t.type=0 UNION ALL SELECT r.id transaction_id, r.number, null location, t.type, t.date, t.note FROM board b, transaction t, retrieve r WHERE b.sn='$sn' AND b.id=t.board_id AND r.id=t.transaction_id AND t.type=1) result ORDER BY date";
                     $result = mysql_query($sql);
                     $rows = array();
                     while($r = mysql_fetch_assoc($result)) {
@@ -169,7 +169,7 @@ if (isset($_POST["function"])) {
                     $result = mysql_query($sql);
                     $rows = array();
                     while($r = mysql_fetch_assoc($result)) {
-                        $rows[] = $r;
+                        $rows[] = $r[sn];
                     }
                     echo json_encode($rows);
                 }
@@ -229,6 +229,18 @@ if (isset($_POST["function"])) {
                     }
                     echo json_encode($rows);
                 }
+                else if ($_POST["function"] == "get_recommend_retrieve_number") {
+                    $number_part = $_POST["number_part"];
+
+                    $sql = "SELECT DISTINCT number FROM retrieve WHERE number LIKE '%$number_part%' ORDER BY id DESC LIMIT 10";
+
+                    $result = mysql_query($sql);
+                    $rows = array();
+                    while($r = mysql_fetch_assoc($result)) {
+                        $rows[] = $r[number];
+                    }
+                    echo json_encode($rows);
+                }
                 else if ($_POST["function"] == "get_recommend_claim_location") {
                     $location_part = $_POST["location_part"];
 
@@ -238,6 +250,30 @@ if (isset($_POST["function"])) {
                     $rows = array();
                     while($r = mysql_fetch_assoc($result)) {
                         $rows[] = $r[location];
+                    }
+                    echo json_encode($rows);
+                }
+                else if ($_POST["function"] == "get_recommend_retrieve_note") {
+                    $number_part = $_POST["number_part"];
+
+                    $sql = "SELECT note FROM transaction where type=1 ORDER BY date DESC LIMIT 10";
+
+                    $result = mysql_query($sql);
+                    $rows = array();
+                    while($r = mysql_fetch_assoc($result)) {
+                        $rows[] = $r[note];
+                    }
+                    echo json_encode($rows);
+                }
+                else if ($_POST["function"] == "get_recommend_claim_note") {
+                    $number_part = $_POST["number_part"];
+
+                    $sql = "SELECT note FROM transaction where type=0 ORDER BY date DESC LIMIT 10";
+
+                    $result = mysql_query($sql);
+                    $rows = array();
+                    while($r = mysql_fetch_assoc($result)) {
+                        $rows[] = $r[note];
                     }
                     echo json_encode($rows);
                 }
