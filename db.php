@@ -1,10 +1,7 @@
 <?php
 header("Content-Type: text/html; charset=UTF-8");
 
-$host="localhost";
-$user="root"; // MySql Username
-$pass="root"; // MySql Password
-$dbname="sparepart"; // Database Name
+require_once("db_info.php");
 
 $conn = mysql_connect($host, $user, $pass) or die("ไม่สามารถเชื่อมต่อฐานข้อมูลได้"); // เชื่อมต่อ ฐานข้อมูล
 mysql_select_db($dbname, $conn); // เลือกฐานข้อมูล
