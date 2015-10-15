@@ -65,6 +65,9 @@
                     <li><a href="?page=summary-device">รายการอุปกรณ์</a></li>
                     <li><a href="#">#เพิ่มภายหลัง เผื่อมี</a></li>
                 </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li><a>v1.0 alpha 2015-10-15</a></li>
+                </ul>
             </div><!--/.nav-collapse -->
         </div>
     </nav>
@@ -81,8 +84,8 @@
                     <li <?php if ($_GET["page"] == "retrieve-device") echo 'class="active"';?>><a href="?page=retrieve-device">รายการรับคืน</a></li>
                 </ul>
                 <ul class="nav nav-sidebar">
-                    <li <?php if ($_GET["page"] == "info") echo 'class="active"';?>><a href="?page=info">ข้อมูลเพิ่มเติม</a></li>
-                    <li <?php if ($_GET["page"] == "user") echo 'class="active"';?>><a href="?page=user">ข้อมูลผู้ใช้</a></li>
+                    <li <?php if ($_GET["page"] == "info") echo 'class="active"';?>><a href="?page=info">#ข้อมูลเพิ่มเติม</a></li>
+                    <li <?php if ($_GET["page"] == "user") echo 'class="active"';?>><a href="?page=user">#ข้อมูลผู้ใช้</a></li>
                 </ul>
 
 
