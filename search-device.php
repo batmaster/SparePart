@@ -64,7 +64,7 @@
     </div>
 
     <div class="btn-group btn-outline">
-        <button type="button" class="btn btn-success" id="search-button"><span class="glyphicon glyphicon-search"></span> ค้นหา</button>
+        <button type="button" class="btn btn-info" id="search-button"><span class="glyphicon glyphicon-search"></span> ค้นหา</button>
     </div>
 
     <div class="panel panel-default">

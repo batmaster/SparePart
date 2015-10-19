@@ -48,8 +48,7 @@ if (isset($_POST["function"])) {
         /*if ($status == "Broken")
         else */if ($status == "Claiming")
             $sql = "SELECT b.*,
-            (SELECT CASE t.type WHEN 0 THEN 'Claiming' ELSE 'In stock' END FROM transaction t WHERE t.board_id=b.id ORDER BY date DESC LIMIT 1) status
-            FROM board b WHERE b.brand LIKE '%$brand%' AND b.model LIKE '%$model%' AND b.type LIKE '%$type%' AND (SELECT t.type FROM transaction t WHERE t.board_id=b.id ORDER BY date DESC LIMIT 1)=0";
+            (SELECT CASE t.type WHEN 0 THEN 'Claiming' ELSE 'In stock' END FROM transaction t WHERE t.board_id=b.id ORDER BY date DESC LIMIT 1) status FROM board b WHERE b.brand LIKE '%$brand%' AND b.model LIKE '%$model%' AND b.type LIKE '%$type%' AND (SELECT t.type FROM transaction t WHERE t.board_id=b.id ORDER BY date DESC LIMIT 1)=0";
         else if ($status == "In stock")
             $sql = "SELECT b.*, (SELECT CASE t.type WHEN 0 THEN 'Claiming' ELSE 'In stock' END FROM transaction t WHERE t.board_id=b.id ORDER BY date DESC LIMIT 1) status FROM board b WHERE b.brand LIKE '%$brand%' AND b.model LIKE '%$model%' AND b.type LIKE '%$type%' AND (SELECT t.type FROM transaction t WHERE t.board_id=b.id ORDER BY date DESC LIMIT 1)=1";
         else
