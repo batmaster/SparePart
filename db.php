@@ -142,7 +142,7 @@ if (isset($_POST["function"])) {
         }
         echo json_encode($rows);
     }
-    else if ($_POST["function"] == "count_by_model") {
+    else if ($_POST["function"] == "count_by_model_instock") {
 
         $sql = "SELECT brand, model, COUNT(*) amount FROM board b WHERE (SELECT t.type FROM transaction t WHERE t.board_id=b.id ORDER BY t.date DESC LIMIT 1)=1 GROUP BY brand, model";
         $result = mysql_query($sql);
@@ -152,7 +152,7 @@ if (isset($_POST["function"])) {
         }
         echo json_encode($rows);
     }
-    else if ($_POST["function"] == "count_by_type") {
+    else if ($_POST["function"] == "count_by_type_instock") {
 
         $sql = "SELECT type, COUNT(*) amount FROM board b WHERE (SELECT t.type FROM transaction t WHERE t.board_id=b.id ORDER BY t.date DESC LIMIT 1)=1 GROUP BY type";
         $result = mysql_query($sql);
@@ -225,6 +225,18 @@ if (isset($_POST["function"])) {
         $rows = array();
         while($r = mysql_fetch_assoc($result)) {
             $rows[] = $r;
+        }
+        echo json_encode($rows);
+    }
+    else if ($_POST["function"] == "get_recommend_add_device") {
+        $model_part = $_POST["model_part"];
+
+        $sql = "SELECT DISTINCT model FROM board WHERE model LIKE '%$number_part%' ORDER BY id DESC LIMIT 10";
+
+        $result = mysql_query($sql);
+        $rows = array();
+        while($r = mysql_fetch_assoc($result)) {
+            $rows[] = $r[model];
         }
         echo json_encode($rows);
     }

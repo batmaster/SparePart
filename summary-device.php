@@ -64,7 +64,7 @@
             type: "POST",
             dataType: 'json',
             data: {
-                "function": "count_by_model"
+                "function": "count_by_model_instock"
             }
         }).done(function(results) {
             $("#table-body-model-instock").empty();
@@ -78,24 +78,24 @@
             }
         });
 
-        $.ajax({
-            url: 'db.php',
-            type: "POST",
-            dataType: 'json',
-            data: {
-                "function": "count_by_type"
-            }
-        }).done(function(results) {
-            $("#table-body-type").empty();
-            if (results.length == 0) {
-                $("#table-body-type-instock").append("<tr><th></th><td>Not found!</td><td></td></tr>");
-            }
-            else {
-                for (var i = 0; i < results.length; i++) {
-                    $("#table-body-type-instock").append("<tr><th>" + (i+1) + "</th><td>" + results[i].type + "</td><td>" + results[i].amount + "</td></tr>");
-                }
-            }
-        });
+        // $.ajax({
+        //     url: 'db.php',
+        //     type: "POST",
+        //     dataType: 'json',
+        //     data: {
+        //         "function": "count_by_type_instock"
+        //     }
+        // }).done(function(results) {
+        //     $("#table-body-type").empty();
+        //     if (results.length == 0) {
+        //         $("#table-body-type-instock").append("<tr><th></th><td>Not found!</td><td></td></tr>");
+        //     }
+        //     else {
+        //         for (var i = 0; i < results.length; i++) {
+        //             $("#table-body-type-instock").append("<tr><th>" + (i+1) + "</th><td>" + results[i].type + "</td><td>" + results[i].amount + "</td></tr>");
+        //         }
+        //     }
+        // });
 	});
 
     $("#brand-dropdown li").click(function() {

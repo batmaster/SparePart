@@ -122,7 +122,12 @@
 
 <script type="text/javascript">
 
-  var now = moment().subtract("seconds", 1)
+  $(document).ready(function() {
+      var now = moment().subtract("seconds", 1);
+      $("#date").val(now.format("YYYY-MM-DD HH:mm"));
+  });
+
+
 
   $(".filthypillow").filthypillow({
       minDateTime: function() {
@@ -147,6 +152,30 @@
 
 
 <script type="text/javascript">
+
+    $("#model").keyup(function() {
+        $.ajax({
+            url: 'db.php',
+            type: "POST",
+            dataType: "json",
+            data: {
+                "function": "get_recommend_add_device",
+                "model_part": $("#model").val()
+            },
+            beforeSend: function() {
+
+            },
+            success: function(results) {
+                console.log(results);
+                $("#model").autocomplete({
+                    source: results
+                });
+            },
+            complete: function() {
+
+            }
+        });
+    });
 
     var checkSNFunction = function () {
         $.ajax({
@@ -176,6 +205,7 @@
             }
         });
     };
+
     $("#sn").on("blur change", checkSNFunction);
     $("#sn").on('keypress', function() {
          if (event.which === 13) {

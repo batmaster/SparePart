@@ -93,6 +93,9 @@
 <script type="text/javascript">
 
     $(document).ready(function() {
+        var now = moment().subtract("seconds", 1);
+        $("#date").val(now.format("YYYY-MM-DD HH:mm"));
+        
 		<?php
             if (isset($_GET["sn"])) {
                 echo "$(\"#sn\").val(\"{$_GET["sn"]}\");";
@@ -119,6 +122,7 @@
                 $("#sn-loading").show();
             },
             success: function(results) {
+              console.log(results);
                 $("#sn").autocomplete({
                     source: results
                 });

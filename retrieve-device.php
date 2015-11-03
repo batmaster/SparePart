@@ -82,6 +82,8 @@
 <script type="text/javascript">
 
     $(document).ready(function() {
+        var now = moment().subtract("seconds", 1);
+        $("#date").val(now.format("YYYY-MM-DD HH:mm"));
 
 		<?php
             if (isset($_GET["sn"])) {
@@ -105,11 +107,10 @@
                 "function": "get_available_sn_retrieve",
                 "sn_part": $("#sn").val()
             },
-            beforeSend: function(){
+            beforeSend: function() {
                 $("#sn-loading").show();
             },
             success: function(results) {
-                console
                 $("#sn").autocomplete({
                     source: results
                 });
