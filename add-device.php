@@ -122,36 +122,29 @@
 
 <script type="text/javascript">
 
-  $(document).ready(function() {
-      var now = moment().subtract("seconds", 1);
-      $("#date").val(now.format("YYYY-MM-DD HH:mm"));
-  });
+    $(document).ready(function() {
+        var now = moment().subtract("seconds", 1);
+        $("#date").val(now.format("YYYY-MM-DD HH:mm"));
+    });
 
+    $(".filthypillow").filthypillow({
+        // minDateTime: function() {
+        //     return moment().subtract("days", 1);
+        // },
+        // maxDateTime: function() {
+        //     return moment().add("days", 7);
+        // },
+        calendar: {
+            saveOnDateSelect: false,
+            isPinned: true
+        },
+        exitOnBackgroundClick: false
+    });
 
-
-  $(".filthypillow").filthypillow({
-      minDateTime: function() {
-          return moment().subtract("days", 1);
-      },
-      maxDateTime: function() {
-          return moment().add("days", 7);
-      },
-      calendar: {
-          saveOnDateSelect: false,
-          isPinned: true
-      },
-      exitOnBackgroundClick: false
-  });
-
-  $(".filthypillow").on("fp:save", function(e, dateObj) {
-      $("#date").val(dateObj.format("YYYY-MM-DD HH:mm"));
-      $(".filthypillow").filthypillow("hide");
-  });
-
-</script>
-
-
-<script type="text/javascript">
+    $(".filthypillow").on("fp:save", function(e, dateObj) {
+        $("#date").val(dateObj.format("YYYY-MM-DD HH:mm"));
+        $(".filthypillow").filthypillow("hide");
+    });
 
     $("#model").keyup(function() {
         $.ajax({

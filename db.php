@@ -152,9 +152,9 @@ if (isset($_POST["function"])) {
         }
         echo json_encode($rows);
     }
-    else if ($_POST["function"] == "count_by_type_instock") {
+    else if ($_POST["function"] == "count_by_model_claimimg") {
 
-        $sql = "SELECT type, COUNT(*) amount FROM board b WHERE (SELECT t.type FROM transaction t WHERE t.board_id=b.id ORDER BY t.date DESC LIMIT 1)=1 GROUP BY type";
+        $sql = "SELECT brand, model, COUNT(*) amount FROM board b WHERE (SELECT t.type FROM transaction t WHERE t.board_id=b.id ORDER BY t.date DESC LIMIT 1)=0 GROUP BY brand, model";
         $result = mysql_query($sql);
         $rows = array();
         while($r = mysql_fetch_assoc($result)) {
@@ -162,6 +162,16 @@ if (isset($_POST["function"])) {
         }
         echo json_encode($rows);
     }
+    // else if ($_POST["function"] == "count_by_type_instock") {
+    //
+    //     $sql = "SELECT type, COUNT(*) amount FROM board b WHERE (SELECT t.type FROM transaction t WHERE t.board_id=b.id ORDER BY t.date DESC LIMIT 1)=1 GROUP BY type";
+    //     $result = mysql_query($sql);
+    //     $rows = array();
+    //     while($r = mysql_fetch_assoc($result)) {
+    //         $rows[] = $r;
+    //     }
+    //     echo json_encode($rows);
+    // }
     else if ($_POST["function"] == "get_available_sn_claim") {
         $sn_part = $_POST["sn_part"];
 

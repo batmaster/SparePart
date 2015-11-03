@@ -1,5 +1,5 @@
 <h1 class="page-header">ยอดในคลัง</h1>
-<h2 class="sub-header">แบ่งตามรุ่นบอร์ด</h2>
+<!-- <h2 class="sub-header">แบ่งตามรุ่นบอร์ด</h2> -->
 <div class="row">
     <div class="panel panel-default">
         <table class="table table-bordered">
@@ -18,7 +18,7 @@
     </div>
 </div>
 
-<h2 class="sub-header">แบ่งตามประเภทการใช้งาน</h2>
+<!-- <h2 class="sub-header">แบ่งตามประเภทการใช้งาน</h2>
 <div class="row">
     <div class="panel panel-default">
         <table class="table table-bordered">
@@ -34,10 +34,10 @@
             </tbody>
         </table>
     </div>
-</div>
+</div> -->
 
 <h1 class="page-header">ยอดส่งเคลม</h1>
-<h2 class="sub-header">แบ่งตามรุ่นบอร์ด</h2>
+<!-- <h2 class="sub-header">แบ่งตามรุ่นบอร์ด</h2> -->
 <div class="row">
     <div class="panel panel-default">
         <table class="table table-bordered">
@@ -74,6 +74,25 @@
             else {
                 for (var i = 0; i < results.length; i++) {
                     $("#table-body-model-instock").append("<tr><th>" + (i+1) + "</th><td>" + results[i].brand + "</td><td>" + results[i].model + "</td><td>" + results[i].amount + "</td></tr>");
+                }
+            }
+        });
+
+        $.ajax({
+            url: 'db.php',
+            type: "POST",
+            dataType: 'json',
+            data: {
+                "function": "count_by_model_claimimg"
+            }
+        }).done(function(results) {
+            $("#table-body-model-claiming").empty();
+            if (results.length == 0) {
+                $("#table-body-model-claiming").append("<tr><th></th><td>Not found!</td><td></td><td></td></tr>");
+            }
+            else {
+                for (var i = 0; i < results.length; i++) {
+                    $("#table-body-model-claiming").append("<tr><th>" + (i+1) + "</th><td>" + results[i].brand + "</td><td>" + results[i].model + "</td><td>" + results[i].amount + "</td></tr>");
                 }
             }
         });

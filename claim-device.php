@@ -44,6 +44,7 @@
                 </span>
                 <input type="text" class="form-control" id="date">
             </div>
+            <div class="filthypillow"></div>
         </div>
 
         <div class="form-group" id="form-number">
@@ -92,22 +93,41 @@
 
 <script type="text/javascript">
 
-    $(document).ready(function() {
-        var now = moment().subtract("seconds", 1);
-        $("#date").val(now.format("YYYY-MM-DD HH:mm"));
-        
-		<?php
-            if (isset($_GET["sn"])) {
-                echo "$(\"#sn\").val(\"{$_GET["sn"]}\");";
-                echo "$(\"#sn\").change();";
-                echo "$(\"#date\").focus();";
-            }
-            else {
-                echo "$(\"#sn\").focus();";
-            }
-        ?>
+      $(document).ready(function() {
+          var now = moment().subtract("seconds", 1);
+          $("#date").val(now.format("YYYY-MM-DD HH:mm"));
 
-	});
+  		<?php
+              if (isset($_GET["sn"])) {
+                  echo "$(\"#sn\").val(\"{$_GET["sn"]}\");";
+                  echo "$(\"#sn\").change();";
+                  echo "$(\"#date\").focus();";
+              }
+              else {
+                  echo "$(\"#sn\").focus();";
+              }
+          ?>
+
+  	});
+
+    $(".filthypillow").filthypillow({
+        // minDateTime: function() {
+        //     return moment().subtract("days", 1);
+        // },
+        // maxDateTime: function() {
+        //     return moment().add("days", 7);
+        // },
+        calendar: {
+            saveOnDateSelect: false,
+            isPinned: true
+        },
+        exitOnBackgroundClick: false
+    });
+
+    $(".filthypillow").on("fp:save", function(e, dateObj) {
+        $("#date").val(dateObj.format("YYYY-MM-DD HH:mm"));
+        $(".filthypillow").filthypillow("hide");
+    });
 
     $("#sn").keyup(function() {
         $.ajax({
@@ -131,6 +151,10 @@
                 $("#sn-loading").hide();
             }
         });
+    });
+
+    $("#date").on("focus", function() {
+        $(".filthypillow").filthypillow("show");
     });
 
     $("#number").keyup(function() {
