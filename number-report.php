@@ -134,37 +134,20 @@
     });
 
     $("#search-button").click(function() {
-        $("#form-number, #form-brand, #form-model").removeClass("has-success");
-        $("#form-number, #form-date, #form-number").removeClass("has-error");
-
-        if ($("#brand").val() == "" || $("#model").val() == "") {
-            $("#form-number").addClass("has-error");
-        }
-        if ($("#date").val() == "") {
-            $("#form-date").addClass("has-error");
-        }
-        if ($("#number").val() == "") {
-            $("#form-number").addClass("has-error");
-        }
-        if (!($("#brand").val() == "") && !($("#model").val() == "") && !($("#date").val() == "") && !($("#number").val() == "")) {
-            $.ajax({
-                url: 'db.php',
-                type: "POST",
-                data: {
-                    "function": "retrieve",
-                    "number": $("#number").val(),
-                    "brand": $("#brand").val(),
-                    "model": $("#model").val(),
-                    "date": $("#date").val(),
-                    "number": $("#number").val(),
-                    "note": $("#note").val()
-                }
-            }).done(function(result) {
-                location.reload();
-                // console.log(result);
-                // alert("น่าจะ ok");                  //ยืนยันการบันทึก
-            });
-        }
+        $.ajax({
+            url: 'db.php',
+            type: "POST",
+            data: {
+                "function": "number_report",
+                "number": $("#number").val(),
+                "date-start": $("#date-start").val(),
+                "date-end": $("#date-end").val()
+            }
+        }).done(function(result) {
+            location.reload();
+            // console.log(result);
+            // alert("น่าจะ ok");                  //ยืนยันการบันทึก
+        });
     });
 
 

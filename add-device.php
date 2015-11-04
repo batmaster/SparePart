@@ -5,11 +5,11 @@
         <div class="form-group" id="form-brand">
             <label>ยี่ห้อ *</label>
             <div class="dropdown">
-                <button class="btn btn-default dropdown-toggle" type="button" id="brand" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    <text>Dropdown</text>
+                <button class="btn btn-default dropdown-toggle" type="button" id="brand" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="width: 100%">
+                    <text>OPNET</text>
                     <span class="caret"></span>
                 </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id="brand-dropdown" >
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id="brand-dropdown" style="width: 100%">
                     <li><a href="#">OPNET</a></li>
                     <li><a href="#">ERICSSON</a></li>
                     <li><a href="#">HUAWEI</a></li>
@@ -47,7 +47,7 @@
             <label>ประเภทการใช้งาน *</label>
             <div class="dropdown">
                 <button class="btn btn-default dropdown-toggle" type="button" id="type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    <text>Dropdown</text>
+                    <text>เลขหมาย</text>
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id="type-dropdown">

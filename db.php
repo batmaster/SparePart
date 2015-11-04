@@ -361,6 +361,16 @@ if (isset($_POST["function"])) {
         mysql_query($sql);
             // echo $sql;
     }
+    else if ($_POST["function"] == "number_report") {
+        $number = $_POST["number"];
+        $date_start = $_POST["date-start"];
+        $date_end = $_POST["number"];
+
+        $sql = "INSERT INTO transaction (board_id, transaction_id, date, type, note) VALUES (
+            (SELECT id FROM board WHERE sn='$sn'), 0, NOW(), -1, 'เสียโดยสิ้นเชิง')";
+        mysql_query($sql);
+            // echo $sql;
+    }
 
 
 }
