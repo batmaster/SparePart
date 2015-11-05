@@ -71,30 +71,7 @@
         $("#date-start").val(moment().format("YYYY-MM-DD"));
         $("#date-end").val(moment().format("YYYY-MM-DD"));
 
-    });
-
-    $("#number").keyup(function() {
-        $.ajax({
-            url: 'db.php',
-            type: "POST",
-            dataType: "json",
-            data: {
-                "function": "get_available_number_retrieve",
-                "number_part": $("#number").val()
-            },
-            beforeSend: function(){
-                $("#number-loading").show();
-            },
-            success: function(results) {
-                console
-                $("#number").autocomplete({
-                    source: results
-                });
-            },
-            complete: function() {
-                $("#number-loading").hide();
-            }
-        });
+        search();
     });
 
     $("#number").keyup(function() {
@@ -134,21 +111,28 @@
     });
 
     $("#search-button").click(function() {
+      search();
+
+    });
+
+    function search() {
         $.ajax({
             url: 'db.php',
             type: "POST",
+            dataType: 'json',
             data: {
                 "function": "number_report",
-                "number": $("#number").val(),
+                "number_path": $("#number").val(),
                 "date-start": $("#date-start").val(),
                 "date-end": $("#date-end").val()
             }
-        }).done(function(result) {
-            location.reload();
-            // console.log(result);
-            // alert("น่าจะ ok");                  //ยืนยันการบันทึก
+        }).done(function(results) {
+            $("#table-body-number").empty();
+            for (var i = 0; i < results.length; i++) {
+                $("#table-body-number").append("<tr><th>" + (i+1) + "</th><td>" + results[i].number + "</td><td>" + (results[i].type == 1 ? "Retrieve" : "Claim") + "</td><td>" + results[i].amount + "</a></td><td>" + results[i].date + "</td><td></tr>");
+            }
         });
-    });
+    }
 
 
 </script>

@@ -75,7 +75,7 @@
                 </span>
                 <input type="text" class="form-control" id="date">
             </div>
-            <div class="filthypillow"></div>
+            <div class="filthypillow" id="calendar"></div>
         </div>
 
         <div class="form-group">
@@ -127,7 +127,7 @@
         $("#date").val(now.format("YYYY-MM-DD HH:mm"));
     });
 
-    $(".filthypillow").filthypillow({
+    $("#calendar").filthypillow({
         // minDateTime: function() {
         //     return moment().subtract("days", 1);
         // },
@@ -141,9 +141,9 @@
         exitOnBackgroundClick: false
     });
 
-    $(".filthypillow").on("fp:save", function(e, dateObj) {
+    $("#calendar").on("fp:save", function(e, dateObj) {
         $("#date").val(dateObj.format("YYYY-MM-DD HH:mm"));
-        $(".filthypillow").filthypillow("hide");
+        $("#calendar").filthypillow("hide");
     });
 
     $("#model").keyup(function() {
@@ -207,7 +207,7 @@
     });
 
     $("#date").on("focus", function() {
-        $(".filthypillow").filthypillow("show");
+        $("#calendar").filthypillow("show");
     });
 
     $("#submit-button").click(function() {

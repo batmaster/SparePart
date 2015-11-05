@@ -361,14 +361,19 @@ if (isset($_POST["function"])) {
             // echo $sql;
     }
     else if ($_POST["function"] == "number_report") {
-        $number = $_POST["number"];
+        $number_part = $_POST["number_path"];
         $date_start = $_POST["date-start"];
         $date_end = $_POST["number"];
 
-        $sql = "INSERT INTO transaction (board_id, transaction_id, date, type, note) VALUES (
-            (SELECT id FROM board WHERE sn='$sn'), 0, NOW(), -1, 'เสียโดยสิ้นเชิง')";
-        mysql_query($sql);
-            // echo $sql;
+        $sql = "SELECT c.number, t.type, COUNT(*) amount, (SELECT t.date FROM transaction t WHERE t.transaction_id=c.id ORDER BY t.date DESC LIMIT 1) date FROM claim c, transaction t WHERE t.type=0 AND t.transaction_id=c.id GROUP BY c.number
+          UNION
+          SELECT r.number, t.type, COUNT(*) amount, (SELECT t.date FROM transaction t WHERE t.transaction_id=r.id ORDER BY t.date DESC LIMIT 1) date FROM retrieve r, transaction t WHERE t.type=1 AND t.transaction_id=r.id GROUP BY r.number";
+        $result = mysql_query($sql);
+        $rows = array();
+        while($r = mysql_fetch_assoc($result)) {
+            $rows[] = $r;
+        }
+        echo json_encode($rows);
     }
 
 
