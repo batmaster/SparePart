@@ -46,6 +46,7 @@
           display: none;
         }
     </style>
+    <?php include('config.php'); ?>
 </head>
 
 <body>
@@ -66,7 +67,7 @@
                     <li><a href="#">#เพิ่มภายหลัง เผื่อมี</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a>v1.0 alpha 2015-10-15</a></li>
+                    <li><a><?php echo $version; ?></a></li>
                 </ul>
             </div><!--/.nav-collapse -->
         </div>
