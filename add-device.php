@@ -1,12 +1,11 @@
-<h1 class="page-header">Add Device</h1>
-<h2 class="sub-header">Section title</h2>
+<h2 class="sub-header">อุปกรณ์</h2>
 <div class="row">
     <div class="col-xs-6">
         <div class="form-group" id="form-brand">
             <label>ยี่ห้อ *</label>
             <div class="dropdown">
-                <button class="btn btn-default dropdown-toggle" type="button" id="brand" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="width: 100%">
-                    <text>OPNET</text>
+                <button class="btn btn-default dropdown-toggle form-control" type="button" id="brand" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="width: 100%">
+                    <text>เลือกยี่ห้อ</text>
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id="brand-dropdown" style="width: 100%">
@@ -43,14 +42,14 @@
             </div>
         </div>
 
-        <div class="form-group" id="form-brand">
+        <div class="form-group" id="form-type">
             <label>ประเภทการใช้งาน *</label>
             <div class="dropdown">
-                <button class="btn btn-default dropdown-toggle" type="button" id="type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                    <text>เลขหมาย</text>
+                <button class="btn btn-default dropdown-toggle form-control" type="button" id="type" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true" style="width: 100%">
+                    <text>เลือกประเภท</text>
                     <span class="caret"></span>
                 </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id="type-dropdown">
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id="type-dropdown" style="width: 100%">
                     <li><a href="#">เลขหมาย</a></li>
                     <li><a href="#">CPU</a></li>
                     <li><a href="#">POWER</a></li>
@@ -76,26 +75,6 @@
                 <input type="text" class="form-control" id="date">
             </div>
             <div class="filthypillow" id="calendar"></div>
-        </div>
-
-        <div class="form-group">
-            <label>เลขที่สินทรัพย์</label>
-            <div class="input-group">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-book"></span>
-                </span>
-                <input type="text" class="form-control" id="number">
-            </div>
-        </div>
-
-        <div class="form-group">
-            <label>รหัสพัสดุ</label>
-            <div class="input-group">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-book"></span>
-                </span>
-                <input type="text" class="form-control" id="code">
-            </div>
         </div>
 
         <div class="form-group">
@@ -128,12 +107,6 @@
     });
 
     $("#calendar").filthypillow({
-        // minDateTime: function() {
-        //     return moment().subtract("days", 1);
-        // },
-        // maxDateTime: function() {
-        //     return moment().add("days", 7);
-        // },
         calendar: {
             saveOnDateSelect: false,
             isPinned: true
@@ -145,6 +118,27 @@
         $("#date").val(dateObj.format("YYYY-MM-DD HH:mm"));
         $("#calendar").filthypillow("hide");
     });
+
+
+
+    $("#brand-dropdown").click(function() {
+        $("#form-brand").removeClass("has-error");
+
+    });
+
+    $("#model").keyup(function() {
+        $("#form-model").removeClass("has-error");
+    });
+
+    $("#sn").keyup(function() {
+        $("#form-sn").removeClass("has-error");
+    });
+
+    $("#type-dropdown").click(function() {
+        $("#form-type").removeClass("has-error");
+    });
+
+
 
     $("#model").keyup(function() {
         $.ajax({
@@ -159,7 +153,6 @@
 
             },
             success: function(results) {
-                console.log(results);
                 $("#model").autocomplete({
                     source: results
                 });
@@ -188,9 +181,15 @@
                     $("#error").text("S/N ซ้ำ");
                 }
                 else {
-                    $("#form-sn").removeClass("has-error");
-                    $("#form-sn").addClass("has-success");
-                    $("#error").text("");
+                    if ($("#sn").val() == "") {
+                        $("#form-sn").addClass("has-error");
+                        $("#error").text("");
+                    }
+                    else {
+                        $("#form-sn").removeClass("has-error");
+                        $("#form-sn").addClass("has-success");
+                        $("#error").text("");
+                    }
                 }
             },
             complete: function(results) {
@@ -210,39 +209,48 @@
         $("#calendar").filthypillow("show");
     });
 
+    function validate() {
+        if ($("#brand text").text() == "เลือกยี่ห้อ") {
+            $("#form-brand").addClass("has-error");
+        }
+
+        if ($("#type text").text() == "เลือกประเภท") {
+            $("#form-type").addClass("has-error");
+        }
+
+        if ($("#model").val() == "") {
+            $("#form-model").addClass("has-error");
+        }
+
+        if ($("#sn").val() == "") {
+            $("#form-sn").addClass("has-error");
+        }
+
+        return !$("#form-brand").hasClass("has-error") && !$("#form-type").hasClass("has-error") && !$("#form-model").hasClass("has-error") && !$("#form-sn").hasClass("has-error");
+    }
+
     $("#submit-button").click(function() {
-        //        alert( $("#brand text").text()  +$("#model").val() + $("#sn").val() + $("#type text").text());
-        // ส่งข้อมูลไป php
-        $.ajax({
-            url: 'db.php',
-            type: "POST",
-            //            contentType: "application/json",
-            // dataType: "json",
-            data: {
-                "function": "add",
-                "brand": $("#brand text").text(),
-                "model": $("#model").val(),
-                "sn": $("#sn").val(),
-                "type": $("#type text").text(),
-                "date": $("#date").val(),
-                "number": $("#number").val(),
-                "code": $("#code").val(),
-            }
-        }).done(function(result) {
-            location.reload();
-            // alert("น่าจะ ok");      //ยืนยันการบันทึก
-            // console.log(result);
-            //            console.log(result[0].id);
-            //            if (result[0].id > 0)
-            //                alert("OK");
-        });
-
-
-
+        if (validate()) {
+            $.ajax({
+                url: 'db.php',
+                type: "POST",
+                data: {
+                    "function": "add",
+                    "brand": $("#brand text").text(),
+                    "model": $("#model").val(),
+                    "sn": $("#sn").val(),
+                    "type": $("#type text").text(),
+                    "date": $("#date").val(),
+                    "note": $("#note").val()
+                }
+            }).done(function(results) {
+                location.reload();
+            });
+        }
     });
 
     $("#clear-button").click(function() {
-            alert("ยังไม่ทำที");
+        location.reload();
     });
 
     $("#brand-dropdown li").click(function() {
@@ -252,6 +260,5 @@
     $("#type-dropdown li").click(function() {
         $("#type text").text($(this).text());
     });
-
 
 </script>

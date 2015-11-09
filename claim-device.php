@@ -1,114 +1,159 @@
-<h1 class="page-header">Claim Devices</h1>
-<h2 class="sub-header">Section title</h2>
+<h2 class="sub-header">เลขที่หนังสือ</h2>
+
 <div class="row">
-    <div class="col-xs-6">
-        <div class="form-group" id="form-sn">
-            <label>S/N *</label>
-            <img src="images/ajax-loader.gif" id="sn-loading" style="display: none"/>
-            <span id="error" style="color: red"></span>
-            <div class="input-group">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-barcode"></span>
-                </span>
-                <input type="text" class="form-control" id="sn">
-            </div>
-        </div>
-
+    <div class="col-xs-12">
         <div class="form-group" id="form-brand">
-            <label>ยี่ห้อ *</label>
-            <div class="input-group">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-barcode"></span>
-                </span>
-                <input type="text" class="form-control" id="brand" disabled>
-            </div>
-        </div>
-
-        <div class="form-group" id="form-model">
-            <label>ชื่ออุปกรณ์ *</label>
-            <div class="input-group">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-barcode"></span>
-                </span>
-                <input type="text" class="form-control" id="model" disabled>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-xs-6">
-        <div class="form-group" id="form-date">
-            <label>วันที่ส่งซ่อม *</label>
-            <div class="input-group">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-calendar"></span>
-                </span>
-                <input type="text" class="form-control" id="date">
-            </div>
-            <div class="filthypillow" id="calendar"></div>
-        </div>
-
-        <div class="form-group" id="form-number">
             <label>เลขที่หนังสือส่ง *</label>
-            <img src="images/ajax-loader.gif" id="number-loading" style="display: none"/>
-            <div class="input-group">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-tag"></span>
-                </span>
-                <input type="text" class="form-control" id="number">
-            </div>
-        </div>
-
-        <div class="form-group" id="form-location">
-            <label>ส่งไปที่ *</label>
-            <img src="images/ajax-loader.gif" id="location-loading" style="display: none"/>
-            <div class="input-group">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-map-marker"></span>
-                </span>
-                <input type="text"class="form-control" id="location">
-            </div>
-        </div>
-
-        <div class="form-group" id="form-location">
-            <label>หมายเหตุ</label>
-            <div class="input-group">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-pencil"></span>
-                </span>
-                <input type="text"class="form-control" id="note">
+            <div class="row">
+                <div class="col-xs-10">
+                    <div class="dropdown">
+                        <button class="btn btn-default dropdown-toggle" type="button" id="brand" data-toggle="dropdown" style="width: 100%">
+                            <text>All</text>
+                            <span class="caret"></span>
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id="brand-dropdown" style="width: 100%">
+                            <li><a href="#">All</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-xs-2">
+                    <div class="btn-group btn-outline">
+                        <a href="#" data-toggle="modal" data-target="#add-number-modal"><button type="button" class="btn btn-info" id="clear-button"><span class="glyphicon glyphicon glyphicon-tag"></span> เพิ่มเลขที่หนังสือส่ง</button></a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 
-    <div class="btn-group btn-outline">
-        <button type="button" class="btn btn-warning" id="clear-button"><span class="glyphicon glyphicon-remove-circle"></span> ล้างฟอร์ม</button>
+    <h2 class="sub-header">รายการบอร์ด</h2>
+    <div class="row">
+        <div class="col-xs-6">
+            <div class="form-group" id="form-sn">
+                <label>S/N *</label>
+                <img src="images/ajax-loader.gif" id="sn-loading" style="display: none"/>
+                <span id="error" style="color: red"></span>
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-barcode"></span>
+                    </span>
+                    <input type="text" class="form-control" id="sn">
+                </div>
+            </div>
+
+            <div class="form-group" id="form-brand">
+                <label>ยี่ห้อ *</label>
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-barcode"></span>
+                    </span>
+                    <input type="text" class="form-control" id="brand" disabled>
+                </div>
+            </div>
+
+            <div class="form-group" id="form-model">
+                <label>ชื่ออุปกรณ์ *</label>
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-barcode"></span>
+                    </span>
+                    <input type="text" class="form-control" id="model" disabled>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-6">
+            <div class="form-group" id="form-date">
+                <label>วันที่ส่งซ่อม *</label>
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                    <input type="text" class="form-control" id="date">
+                </div>
+                <div class="filthypillow" id="calendar"></div>
+            </div>
+
+
+
+            <div class="form-group" id="form-location">
+                <label>ส่งไปที่ *</label>
+                <img src="images/ajax-loader.gif" id="location-loading" style="display: none"/>
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-map-marker"></span>
+                    </span>
+                    <input type="text"class="form-control" id="location">
+                </div>
+            </div>
+
+            <div class="form-group" id="form-location">
+                <label>หมายเหตุ</label>
+                <div class="input-group">
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                    </span>
+                    <input type="text"class="form-control" id="note">
+                </div>
+            </div>
+        </div>
+
+        <div class="btn-group btn-outline">
+            <button type="button" class="btn btn-warning" id="clear-button"><span class="glyphicon glyphicon-remove-circle"></span> ล้างฟอร์ม</button>
+        </div>
+
+        <div class="btn-group btn-outline">
+            <button type="button" class="btn btn-success" id="submit-button"><span class="glyphicon glyphicon-open"></span> ส่งซ่อม</button>
+        </div>
+
     </div>
 
-    <div class="btn-group btn-outline">
-        <button type="button" class="btn btn-success" id="submit-button"><span class="glyphicon glyphicon-open"></span> ส่งซ่อม</button>
+    <div class="modal fade" id="add-number-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    เพิ่มเลขที่หนังสือส่ง
+                </div>
+                <div class="modal-body">
+                    <div class="form-group" id="form-number">
+                        <label>เลขที่หนังสือส่ง *</label>
+                        <img src="images/ajax-loader.gif" id="number-loading" style="display: none"/>
+                        <span id="error" style="color: red"></span>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <span class="glyphicon glyphicon-tag"></span>
+                            </span>
+                            <input type="text" class="form-control" id="number-add">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
+                    <a class="btn btn-success" disabled >ยืนยัน</a>
+                </div>
+            </div>
+        </div>
     </div>
-
 </div>
 
 
-<script type="text/javascript">
+    <script type="text/javascript">
 
-      $(document).ready(function() {
-          var now = moment().subtract("seconds", 1);
-          $("#date").val(now.format("YYYY-MM-DD HH:mm"));
+    $(document).ready(function() {
+        var now = moment().subtract("seconds", 1);
+        $("#date").val(now.format("YYYY-MM-DD HH:mm"));
 
-  		<?php
-              if (isset($_GET["sn"])) {
-                  echo "$(\"#sn\").val(\"{$_GET["sn"]}\");";
-                  echo "$(\"#sn\").change();";
-                  echo "$(\"#date\").focus();";
-              }
-              else {
-                  echo "$(\"#sn\").focus();";
-              }
-          ?>
+        <?php
+        if (isset($_GET["sn"])) {
+            echo "$(\"#sn\").val(\"{$_GET["sn"]}\");";
+            echo "$(\"#sn\").change();";
+            echo "$(\"#date\").focus();";
+        }
+        else {
+            echo "$(\"#sn\").focus();";
+        }
+        ?>
 
-  	});
+    });
 
     $("#calendar").filthypillow({
         // minDateTime: function() {
@@ -142,7 +187,7 @@
                 $("#sn-loading").show();
             },
             success: function(results) {
-              console.log(results);
+                console.log(results);
                 $("#sn").autocomplete({
                     source: results
                 });
@@ -261,7 +306,7 @@
 
                                 $("#form-sn, #form-brand, #form-model").removeClass("has-success");
                                 $("#form-sn").addClass("has-error");
-                                $("#error").text("SN ไม่อยู่ในสถานะพร้อมส่งเครม");
+                                $("#error").text("S/N ซ้ำ");
                             }
                         },
                         complete: function() {
@@ -287,9 +332,9 @@
 
     $("#sn").on("blur change", checkSNFunction);
     $("#sn").on('keypress', function() {
-         if (event.which === 13) {
-             checkSNFunction();
-         }
+        if (event.which === 13) {
+            checkSNFunction();
+        }
     });
 
     $("#clear-button").click(function() {
@@ -345,4 +390,4 @@
     });
 
 
-</script>
+    </script>
