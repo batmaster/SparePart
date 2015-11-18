@@ -85,7 +85,7 @@
                     <li <?php if ($_GET["page"] == "retrieve-device") echo 'class="active"';?>><a href="?page=retrieve-device">รายการรับคืน</a></li>
                 </ul>
                 <ul class="nav nav-sidebar">
-                    <li <?php if ($_GET["page"] == "number-report") echo 'class="active"';?>><a href="?page=number-report">รายงานเลขที่หนังสือรับส่ง</a></li>
+                    <li <?php if ($_GET["page"] == "number-report" || $_GET["page"] == "board-list-report") echo 'class="active"';?>><a href="?page=number-report">รายงานเลขที่หนังสือรับส่ง</a></li>
                     <li <?php if ($_GET["page"] == "monthly-report") echo 'class="active"';?>><a href="?page=monthly-report">รายงานผลรายเดือน</a></li>
                 </ul>
                 <ul class="nav nav-sidebar">
