@@ -1,5 +1,4 @@
-<h1 class="page-header">Summary</h1>
-<h2 class="sub-header">Section title</h2>
+<h2 class="sub-header">ค้นหาอุปกรณ์</h2>
 <div class="row">
     <div class="col-xs-6">
         <div class="form-group" id="form-brand">
@@ -68,9 +67,6 @@
     </div>
 
     <div class="panel panel-default">
-        <!-- Default panel contents -->
-
-        <!-- สร้างตารางรายงาน -->
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -85,15 +81,6 @@
                 </tr>
             </thead>
             <tbody id="table-body">
-                <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                </tr>
             </tbody>
         </table>
     </div>
@@ -172,224 +159,6 @@
 </div>
 
 <script type="text/javascript">
-$(document).ready(function() {
-    getBrands();
-    // getModels();
-
-    $("#search-button").click();
-});
-
-$("#search-button").click(function() {
-    $.ajax({
-        url: 'db.php',
-        type: "POST",
-        dataType: 'json',
-        data: {
-            "function": "search",
-            "brand": $("#brand text").text(),
-            "model": $("#model text").text(),
-            "type": $("#type text").text(),
-            "status": $("#status text").text()
-        }
-    }).done(function(results) {
-        $.ajax({
-            url: 'db.php',
-            type: "POST",
-            dataType: 'json',
-            data: {
-                "function": "search_rows"
-            }
-        }).done(function(results) {
-            // console.log(results);
-        });
-
-        $("#table-body").empty();
-        for (var i = 0; i < results.length; i++) {
-            $("#table-body").append("<tr><th>" + (i+1) + "</th><td>" + results[i].brand + "</td><td>" + results[i].model + "</td><td><a href=\"#\" data-toggle=\"modal\" data-target=\"#detail-modal\" data-sn=\"" + results[i].sn + "\">" + results[i].sn + "</a></td><td>" + results[i].type + "</td><td>" +
-            results[i].status + "</td><td>" + results[i].note + "</td><td><div class=\"btn-group\"><a class=\"btn btn-default" + (results[i].status == "Claiming" ? " a-disabled" : "") + "\" href=\"?page=claim-device&amp;sn=" + results[i].sn + "\"><span class=\"glyphicon glyphicon-open\"></span></a>" +
-            "<a class=\"btn btn-default" + (results[i].status == "In stock" ? " a-disabled" : "") +"\" href=\"?page=retrieve-device&amp;sn=" + results[i].sn + "\"><span class=\"glyphicon glyphicon-save\"></span></a></div></td></tr>");
-        }
-
-    });
-});
-
-function getBrands() {
-    $.ajax({
-        url: 'db.php',
-        type: "POST",
-        dataType: "json",
-        data: {
-            "function": "get_search_brands"
-        },
-        beforeSend: function(){
-            // $("#sn-loading").show();
-        },
-        success: function(results) {
-            $("#brand-dropdown").empty();
-            $("#brand-dropdown").append("<li><a href=\"#\">All</a></li>");
-            for (var i = 0; i < results.length; i++) {
-                $("#brand-dropdown").append("<li><a href=\"#\">" + results[i].brand + "</a></li>");
-            }
-
-            $("#brand-dropdown li").click(function() {
-                $("#brand text").text($(this).text());
-
-                $("#model text").text("All");
-                $("#type text").text("All");
-                getModels();
-                getTypes();
-            });
-        },
-        complete: function() {
-            // $("#sn-loading").hide();
-        }
-    });
-}
-
-function getModels() {
-    $.ajax({
-        url: 'db.php',
-        type: "POST",
-        dataType: "json",
-        data: {
-            "function": "get_search_models",
-            "brand": $("#brand text").text()
-        },
-        beforeSend: function(){
-            // $("#sn-loading").show();
-        },
-        success: function(results) {
-            $("#model-dropdown").empty();
-            $("#model-dropdown").append("<li><a href=\"#\">All</a></li>");
-            for (var i = 0; i < results.length; i++) {
-                $("#model-dropdown").append("<li><a href=\"#\">" + results[i].model + "</a></li>");
-            }
-            $("#model-dropdown li").click(function() {
-                $("#model text").text($(this).text());
-
-                $("#type text").text("All");
-                getTypes();
-            });
-        },
-        complete: function() {
-            // $("#sn-loading").hide();
-        }
-    });
-}
-
-function getTypes() {
-    $.ajax({
-        url: 'db.php',
-        type: "POST",
-        dataType: "json",
-        data: {
-            "function": "get_search_types",
-            "brand": $("#brand text").text(),
-            "model": $("#model text").text()
-        },
-        beforeSend: function(){
-            // $("#sn-loading").show();
-        },
-        success: function(results) {
-            $("#type-dropdown").empty();
-            $("#type-dropdown").append("<li><a href=\"#\">All</a></li>");
-            for (var i = 0; i < results.length; i++) {
-                $("#type-dropdown").append("<li><a href=\"#\">" + results[i].type + "</a></li>");
-            }
-            $("#type-dropdown li").click(function() {
-                $("#type text").text($(this).text());
-
-                getTypes();
-                $("#type text").text("All");
-            });
-        },
-        complete: function() {
-            // $("#sn-loading").hide();
-        }
-    });
-}
-
-
-
-$("#model-dropdown li").click(function() {
-    $("#model text").text($(this).text());
-});
-
-$("#type-dropdown li").click(function() {
-    $("#type text").text($(this).text());
-});
-
-$("#status-dropdown li").click(function() {
-    $("#status text").text($(this).text());
-});
-
-$("#detail-modal").on("show.bs.modal", function (event) {
-    var button = $(event.relatedTarget);
-    var sn = button.data('sn');
-
-    var modal = $(this);
-    modal.find('.modal-title').text('S/N ' + sn);
-
-    $.ajax({
-        url: 'db.php',
-        type: "POST",
-        dataType: 'json',
-        data: {
-            "function": "get_description",
-            "sn": sn
-        }
-    }).done(function(result) {
-        modal.find('.modal-body #brand').text("Brand: " + result.brand);
-        modal.find('.modal-body #model').text("Model: " + result.model);
-        modal.find('.modal-body #sn').text("S/N: " + result.sn);
-        modal.find('.modal-body #type').text("Type: " + result.type);
-        modal.find('.modal-body #date-added').text("Date added: " + result.date);
-
-        modal.find("#ahref").data("sn", sn);
-
-    });
-
-    $.ajax({
-        url: 'db.php',
-        type: "POST",
-        dataType: 'json',
-        data: {
-            "function": "get_transactions_for_sn",
-            "sn": sn
-        }
-    }).done(function(results) {
-        $("#table-body-modal").empty();
-        for (var i = 0; i < results.length; i++) {
-            $("#table-body-modal").append("<tr " + (results[i].type == 0 ? "class=\"info\"" : (results[i].type == 1 ? "class=\"success\"" : "class=\"danger\"")) + "><td>" + results[i].date + "</td><td>" + results[i].number + "</td><td>" +
-            (results[i].location == null ? "" : results[i].location) + "</td><td>" + (results[i].type == 0 ? "ส่งเคลม" : (results[i].type == 1 ? "รับเข้า" : "แจ้งเสีย")) + "</td><td>" + results[i].note + "</td>" +
-            "<td><a href=\"#\" data-toggle=\"modal\" data-target=\"#edit-claim-transaction-modal\" data-sn=\"op441\">ไม่อยากให้แก้ได้เลย -_-</a>" + "</td></tr>");
-        }
-    });
-});
-
-$("#confirm-modal").on("show.bs.modal", function (event) {
-    var button = $(event.relatedTarget);
-    var sn = button.data('sn');
-
-    var modal = $(this);
-    modal.find('.modal-header').text("ยืนยันการแจ้งเสียโดยสิ้นเชิง");
-    modal.find('.modal-body').text("บอร์ด S/N " + sn + " จะไม่สามารถกลับมาใช้งานได้อีก");
-
-    modal.find('.btn-ok').click(function() {
-        $.ajax({
-            url: 'db.php',
-            type: "POST",
-            // dataType: 'json',
-            data: {
-                "function": "broken",
-                "sn": sn
-            }
-        }).done(function(result) {
-            // console.log(result);
-            location.reload();
-        });
-    });
-});
 
 
 </script>

@@ -55,6 +55,16 @@
                 <input type="text" class="form-control" id="model" disabled>
             </div>
         </div>
+
+        <div class="form-group" id="form-type">
+            <label>ประเภทการใช้งาน *</label>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-barcode"></span>
+                </span>
+                <input type="text" class="form-control" id="type" disabled>
+            </div>
+        </div>
     </div>
 
     <div class="col-xs-6">
@@ -78,7 +88,16 @@
                 <input type="text"class="form-control" id="note">
             </div>
         </div>
+
+        <div class="form-group" id="form-location">
+            <label>เสียถาวร</label>
+            <div class="input-group">
+                <input type="checkbox" id="broken">
+            </div>
+        </div>
     </div>
+
+
 
     <div class="btn-group btn-outline">
         <button type="button" class="btn btn-warning" id="clear-button"><span class="glyphicon glyphicon-remove-circle"></span> ล้างฟอร์ม</button>
@@ -121,93 +140,5 @@
 
 <script type="text/javascript">
 
-var checkSNFunction = function () {
-    $.ajax({
-        url: 'db.php',
-        type: "POST",
-        dataType: "json",
-        data: {
-            "function": "check_has_sn",
-            "sn": $("#sn").val()
-        },
-        beforeSend: function(){
-            $("#sn-loading").show();
-        },
-        success: function(results) {
-            if (results[0].count > 0) {
-                $.ajax({
-                    url: 'db.php',
-                    type: "POST",
-                    dataType: "json",
-                    data: {
-                        "function": "check_sn_available_for_claim",
-                        "sn": $("#sn").val()
-                    },
-                    beforeSend: function(){
-                        $("#sn-loading").show();
-                    },
-                    success: function(results) {
-                        if (results[0].count > 0) {
-                            $.ajax({
-                                url: 'db.php',
-                                type: "POST",
-                                dataType: "json",
-                                data: {
-                                    "function": "get_detail_by_sn",
-                                    "sn": $("#sn").val()
-                                },
-                                beforeSend: function(){
-                                    $("#sn-loading").show();
-                                },
-                                success: function(result) {
-                                    $("#brand").val(result[0].brand);
-                                    $("#model").val(result[0].model);
-
-                                    $("#form-sn").removeClass("has-error");
-                                    $("#form-sn, #form-brand, #form-model").addClass("has-success");
-                                    $("#error").text("");
-                                    // console.log($("#form div:nth-child(4)")[0]);
-                                },
-                                complete: function() {
-                                    $("#sn-loading").hide();
-                                }
-                            });
-                        }
-                        else {
-                            $("#brand").val("");
-                            $("#model").val("");
-
-                            $("#form-sn, #form-brand, #form-model").removeClass("has-success");
-                            $("#form-sn").addClass("has-error");
-                            $("#error").text("S/N ซ้ำ");
-                        }
-                    },
-                    complete: function() {
-                        $("#sn-loading").hide();
-                    }
-                });
-            }
-            else {
-                $("#brand").val("");
-                $("#model").val("");
-
-                $("#form-sn, #form-brand, #form-model").removeClass("has-success");
-                $("#form-sn").addClass("has-error");
-                $("#error").text("ไม่พบ SN");
-            }
-
-        },
-        complete: function() {
-            $("#sn-loading").hide();
-        }
-    });
-};
-
-$("#sn").on("blur change", checkSNFunction);
-$("#sn").on('keypress', function() {
-    if (event.which === 13) {
-        checkSNFunction();
-    }
-});
 
 </script>
