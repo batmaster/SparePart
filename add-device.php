@@ -32,7 +32,6 @@
 
         <div class="form-group" id="form-sn">
             <label>S/N *</label>
-            <img src="images/ajax-loader.gif" id="sn-loading" style="display: none"/>
             <span id="error" style="color: red"></span>
             <div class="input-group">
                 <span class="input-group-addon">
@@ -89,7 +88,7 @@
     </div>
 
     <div class="btn-group">
-        <button type="button" class="btn btn-warning" ID="clear-button">Clear</button>
+        <button type="button" class="btn btn-warning" id="clear-button">Clear</button>
     </div>
 
     <div class="btn-group">
@@ -101,5 +100,123 @@
 
 <script type="text/javascript">
 
+$(document).ready(function() {
+    var now = moment().subtract("seconds", 1);
+    $("#date").val(now.format("YYYY-MM-DD HH:mm"));
+});
+
+$("#calendar").filthypillow({
+    calendar: {
+        saveOnDateSelect: false,
+        isPinned: true
+    },
+    exitOnBackgroundClick: false
+});
+
+$("#calendar").on("fp:save", function(e, dateObj) {
+    $("#date").val(dateObj.format("YYYY-MM-DD HH:mm"));
+    $("#calendar").filthypillow("hide");
+});
+
+$("#model").keyup(function() {
+    $("#form-model").removeClass("has-error");
+    $.ajax({
+        url: 'db.php',
+        type: "POST",
+        dataType: "json",
+        data: {
+            "function": "get_recommended_model",
+            "model_part": $("#model").val()
+        }
+    }).done(function(results) {
+        console.log(results);
+        $("#model").autocomplete({
+            source: results
+        });
+    });
+});
+
+$("#sn").on("blur change", checkHasSn);
+$("#sn").on('keyup', function() {
+    $("#form-sn").removeClass("has-error");
+    if (event.which === 13) {
+        checkHasSn();
+    }
+});
+
+
+$("#submit-button").click(function() {
+    if (validate()) {
+        if (!checkHasSn()) {
+            $.ajax({
+                url: 'db.php',
+                type: "POST",
+                data: {
+                    "function": "add_device",
+                    "brand": $("#brand text").text(),
+                    "model": $("#model").val(),
+                    "sn": $("#sn").val(),
+                    "type": $("#type text").text(),
+                    "date": $("#date").val(),
+                    "note": $("#code").val()
+                }
+            }).done(function(results) {
+                location.reload();
+            });
+        }
+    }
+});
+
+function validate() {
+    if ($("#brand text").text() == "เลือกยี่ห้อ") {
+        $("#form-brand").addClass("has-error");
+    }
+    if ($("#type text").text() == "เลือกประเภท") {
+        $("#form-type").addClass("has-error");
+    }
+    if ($("#model").val() == "") {
+        $("#form-model").addClass("has-error");
+    }
+    if ($("#sn").val() == "") {
+        $("#form-sn").addClass("has-error");
+    }
+    return !$("#form-brand").hasClass("has-error") && !$("#form-type").hasClass("has-error") && !$("#form-model").hasClass("has-error") && !$("#form-sn").hasClass("has-error");
+}
+
+function checkHasSn() {
+    $.ajax({
+        url: 'db.php',
+        type: "POST",
+        dataType: "json",
+        data: {
+            "function": "check_has_sn",
+            "sn": $("#sn").val()
+        }
+    }).done(function(results) {
+        if (results[0].count > 0) {
+            $("#form-sn").addClass("has-error");
+            $("#error").text("S/N ซ้ำ");
+            return false;
+        }
+        else {
+            $("#form-sn").removeClass("has-error");
+            $("#error").text("");
+            return true;
+        }
+    });
+}
+
+$("#date").on("focus", function() {
+    $("#calendar").filthypillow("show");
+});
+
+$("#brand-dropdown li").click(function() {
+    $("#brand text").text($(this).text());
+    $("#form-brand").removeClass("has-error");
+});
+$("#type-dropdown li").click(function() {
+    $("#type text").text($(this).text());
+    $("#form-type").removeClass("has-error");
+});
 
 </script>

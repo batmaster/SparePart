@@ -17,7 +17,7 @@
     </div>
 </div>
 
-<h2 class="sub-header">ยอดส่งเคลม</h2>
+<h2 class="sub-header">ยอดส่งซ่อม</h2>
 <div class="row">
     <div class="panel panel-default">
         <table class="table table-bordered">
