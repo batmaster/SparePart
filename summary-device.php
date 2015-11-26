@@ -38,5 +38,45 @@
 
 <script type="text/javascript">
 
+$(document).ready(function() {
+    $.ajax({
+        url: 'db.php',
+        type: "POST",
+        dataType: "json",
+        data: {
+            "function": "get_instock_summary"
+        }
+    }).done(function(results) {
+        $("#table-body-model-instock").empty();
+        if (results.length == 0) {
+            $("#table-body-model-instock").append("<tr><th></th><td>Not found!</td><td></td><td></td></tr>");
+        }
+        else {
+            for (var i = 0; i < results.length; i++) {
+                $("#table-body-model-instock").append("<tr><th>" + (i+1) + "</th><td>" + results[i].brand + "</td><td>" + results[i].model + "</td><td>" + results[i].amount + "</td></tr>");
+            }
+        }
+    });
+
+    $.ajax({
+        url: 'db.php',
+        type: "POST",
+        dataType: "json",
+        data: {
+            "function": "get_claiming_summary"
+        }
+    }).done(function(results) {
+        $("#table-body-model-claiming").empty();
+        if (results.length == 0) {
+            $("#table-body-model-claiming").append("<tr><th></th><td>ไม่พบ!</td><td></td><td></td></tr>");
+        }
+        else {
+            for (var i = 0; i < results.length; i++) {
+                $("#table-body-model-claiming").append("<tr><th>" + (i+1) + "</th><td>" + results[i].brand + "</td><td>" + results[i].model + "</td><td>" + results[i].amount + "</td></tr>");
+            }
+        }
+    });
+});
+
 
 </script>

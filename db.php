@@ -56,6 +56,33 @@ if (isset($_POST["function"])) {
         mysql_query($sql);
     }
 
+    /** SUMMARY DEVICE **/
+    else if ($_POST["function"] == "get_instock_summary") {
+        $sql = "SELECT b.brand, b.model, COUNT(*) amount FROM board b WHERE
+        (SELECT t.type FROM transaction t, transaction_order tor WHERE b.id = tor.board_id AND t.id = tor.transaction_id ORDER BY t.id DESC LIMIT 1) = 1
+        GROUP BY b.brand, b.model";
+
+        $result = mysql_query($sql);
+        $rows = array();
+        while($r = mysql_fetch_assoc($result)) {
+            $rows[] = $r;
+        }
+        echo json_encode($rows);
+    }
+
+    else if ($_POST["function"] == "get_claiming_summary") {
+        $sql = "SELECT b.brand, b.model, COUNT(*) amount FROM board b WHERE
+        (SELECT t.type FROM transaction t, transaction_order tor WHERE b.id = tor.board_id AND t.id = tor.transaction_id ORDER BY t.id DESC LIMIT 1) = 0
+        GROUP BY b.brand, b.model";
+
+        $result = mysql_query($sql);
+        $rows = array();
+        while($r = mysql_fetch_assoc($result)) {
+            $rows[] = $r;
+        }
+        echo json_encode($rows);
+    }
+
 }
 
 ?>
