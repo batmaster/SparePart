@@ -36,7 +36,7 @@
         </div>
 
         <div class="form-group" id="form-brand">
-            <label>ยี่ห้อ *</label>
+            <label>ยี่ห้อ</label>
             <div class="input-group">
                 <span class="input-group-addon">
                     <span class="glyphicon glyphicon-barcode"></span>
@@ -46,7 +46,7 @@
         </div>
 
         <div class="form-group" id="form-model">
-            <label>ชื่ออุปกรณ์ *</label>
+            <label>ชื่ออุปกรณ์</label>
             <div class="input-group">
                 <span class="input-group-addon">
                     <span class="glyphicon glyphicon-barcode"></span>
@@ -56,7 +56,7 @@
         </div>
 
         <div class="form-group" id="form-type">
-            <label>ประเภทการใช้งาน *</label>
+            <label>ประเภทการใช้งาน</label>
             <div class="input-group">
                 <span class="input-group-addon">
                     <span class="glyphicon glyphicon-barcode"></span>
@@ -76,16 +76,7 @@
                 <input type="text"class="form-control" id="note">
             </div>
         </div>
-
-        <div class="form-group" id="form-location">
-            <label>เสียถาวร</label>
-            <div class="input-group">
-                <input type="checkbox" id="broken">
-            </div>
-        </div>
     </div>
-
-
 
     <div class="btn-group btn-outline">
         <button type="button" class="btn btn-warning" id="clear-button"><span class="glyphicon glyphicon-remove-circle"></span> ล้างฟอร์ม</button>
@@ -155,6 +146,13 @@
                     </div>
                 </div>
 
+                <div class="form-group" id="form-location">
+                    <label>โอนอุปกรณ์</label>
+                    <div class="input-group">
+                        <input type="checkbox" id="transfer">
+                    </div>
+                </div>
+
             </div>
 
             <div class="modal-footer">
@@ -210,7 +208,8 @@ $("#add-number-button").click(function() {
                     "from_location": $("#from-location").val(),
                     "to_location": $("#to-location").val(),
                     "date": $("#date").val(),
-                    "note_number": $("#note-number").val()
+                    "note_number": $("#note-number").val(),
+                    "transfer": $("#transfer").is(":checked")
                 }
             }).done(function(results) {
                 location.reload();
@@ -220,7 +219,7 @@ $("#add-number-button").click(function() {
 });
 
 function validateNumber() {
-    if ($("#number").val() == "") {
+    if ($("#number-add").val() == "") {
         $("#form-number-add").addClass("has-error");
     }
     return !$("#form-number-add").hasClass("has-error");
@@ -298,14 +297,23 @@ function checkSnAvailableForClaim() {
             "sn": $("#sn").val()
         }
     }).done(function(results) {
-        if (results[0].count == 0) {
+        console.log(results);
+        if (results.length == 0) {
             $("#form-sn").addClass("has-error");
             $("#error-sn").text("S/N ไม่พร้อมส่งซ่อม หรือไม่มีอยู่ในระบบ");
+
+            $("#brand").val("");
+            $("#model").val("");
+            $("#type").val("");
             return false;
         }
         else {
             $("#form-sn").removeClass("has-error");
             $("#error-sn").text("");
+
+            $("#brand").val(results[0].brand);
+            $("#model").val(results[0].model);
+            $("#type").val(results[0].type);
             return true;
         }
     });

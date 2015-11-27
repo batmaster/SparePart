@@ -85,7 +85,7 @@ if (isset($_POST["function"])) {
 
     /** CLAIM DEVICE **/
     else if ($_POST["function"] == "get_claiming_number") {
-        $sql = "SELECT DISTINCT number FROM transaction WHERE type = 0 ORDER BY date DESC";
+        $sql = "SELECT DISTINCT number, type, to_location FROM transaction WHERE type = 0 OR type = 2 ORDER BY date DESC";
 
         $result = mysql_query($sql);
         $rows = array();
@@ -111,15 +111,16 @@ if (isset($_POST["function"])) {
         $to_location = $_POST["to_location"];
         $date = $_POST["date"];
         $note_number = $_POST["note_number"];
+        $type = $_POST["transfer"] == "true" ? 2 : 0;
 
-        $sql = "INSERT INTO transaction (number, type, from_location, to_location, date, note) VALUES ('$number', 0, '$from_location', '$to_location', '$date', '$note_number')";
+        $sql = "INSERT INTO transaction (number, type, from_location, to_location, date, note) VALUES ('$number', $type, '$from_location', '$to_location', '$date', '$note_number')";
         mysql_query($sql);
     }
 
     else if ($_POST["function"] == "check_sn_available_for_claim") {
         $sn = $_POST["sn"];
 
-        $sql = "SELECT COUNT(*) count FROM board b WHERE
+        $sql = "SELECT b.* FROM board b WHERE
             (SELECT t.type FROM transaction t, transaction_order tor WHERE b.id = tor.board_id AND t.id = tor.transaction_id ORDER BY t.id DESC LIMIT 1) = 1 AND b.sn = '$sn'";
 
         $result = mysql_query($sql);
