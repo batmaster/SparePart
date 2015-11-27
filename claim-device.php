@@ -1,15 +1,15 @@
 <h2 class="sub-header">เลขที่หนังสือ</h2>
 
-<div class="form-group" id="form-brand">
+<div class="form-group" id="form-number">
     <label>เลขที่หนังสือส่ง *</label>
     <div class="row">
         <div class="col-xs-10">
             <div class="dropdown">
-                <button class="btn btn-default dropdown-toggle" type="button" id="brand" data-toggle="dropdown" style="width: 100%">
+                <button class="btn btn-default dropdown-toggle form-control" type="button" id="number" data-toggle="dropdown" style="width: 100%">
                     <text>เลือกเลขที่หนังสือส่ง</text>
                     <span class="caret"></span>
                 </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id="brand-dropdown" style="width: 100%">
+                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id="number-dropdown" style="width: 100%">
                 </ul>
             </div>
         </div>
@@ -26,8 +26,7 @@
     <div class="col-xs-6">
         <div class="form-group" id="form-sn">
             <label>S/N *</label>
-            <img src="images/ajax-loader.gif" id="sn-loading" style="display: none"/>
-            <span id="error" style="color: red"></span>
+            <span id="error-sn" style="color: red"></span>
             <div class="input-group">
                 <span class="input-group-addon">
                     <span class="glyphicon glyphicon-barcode"></span>
@@ -68,18 +67,7 @@
     </div>
 
     <div class="col-xs-6">
-        <div class="form-group" id="form-location">
-            <label>ส่งไปที่ *</label>
-            <img src="images/ajax-loader.gif" id="location-loading" style="display: none"/>
-            <div class="input-group">
-                <span class="input-group-addon">
-                    <span class="glyphicon glyphicon-map-marker"></span>
-                </span>
-                <input type="text"class="form-control" id="location">
-            </div>
-        </div>
-
-        <div class="form-group" id="form-location">
+        <div class="form-group" id="form-note">
             <label>หมายเหตุ</label>
             <div class="input-group">
                 <span class="input-group-addon">
@@ -116,10 +104,9 @@
                 เพิ่มเลขที่หนังสือส่ง
             </div>
             <div class="modal-body">
-                <div class="form-group" id="form-number">
+                <div class="form-group" id="form-number-add">
                     <label>เลขที่หนังสือส่ง *</label>
-                    <img src="images/ajax-loader.gif" id="number-loading" style="display: none"/>
-                    <span id="error" style="color: red"></span>
+                    <span id="error-number" style="color: red"></span>
                     <div class="input-group">
                         <span class="input-group-addon">
                             <span class="glyphicon glyphicon-tag"></span>
@@ -127,7 +114,49 @@
                         <input type="text" class="form-control" id="number-add">
                     </div>
                 </div>
+
+                <div class="form-group" id="form-from-location">
+                    <label>ส่งจาก</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-map-marker"></span>
+                        </span>
+                        <input type="text"class="form-control" id="from-location">
+                    </div>
+                </div>
+
+                <div class="form-group" id="form-to-location">
+                    <label>ส่งไปที่</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-map-marker"></span>
+                        </span>
+                        <input type="text"class="form-control" id="to-location">
+                    </div>
+                </div>
+
+                <div class="form-group" id="form-date">
+                    <label>วันที่ส่ง</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-calendar"></span>
+                        </span>
+                        <input type="text"class="form-control" id="date">
+                    </div>
+                </div>
+
+                <div class="form-group" id="form-note-number">
+                    <label>หมายเหตุ</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">
+                            <span class="glyphicon glyphicon-pencil"></span>
+                        </span>
+                        <input type="text"class="form-control" id="note-number">
+                    </div>
+                </div>
+
             </div>
+
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
                 <button type="button" class="btn btn-success" id="add-number-button">ยืนยัน</button>
@@ -140,5 +169,146 @@
 
 <script type="text/javascript">
 
+$(document).ready(function() {
+    $.ajax({
+        url: 'db.php',
+        type: "POST",
+        dataType: "json",
+        data: {
+            "function": "get_claiming_number"
+        }
+    }).done(function(results) {
+        $("#number-dropdown").empty();
+        for (var i = 0; i < results.length; i++) {
+            $("#number-dropdown").append("<li><a href=\"#\">" + results[i].number + "</a></li>");
+        }
+
+        $("#number-dropdown li").click(function() {
+            $("#number text").text($(this).text());
+            $("#form-number").removeClass("has-error");
+        });
+    });
+});
+
+$("#number-add").on("blur change", checkHasNumber);
+$("#number-add").on('keyup', function() {
+    $("#form-number-add").removeClass("has-error");
+    if (event.which === 13) {
+        checkHasNumber();
+    }
+});
+
+$("#add-number-button").click(function() {
+    if (validateNumber()) {
+        if (!checkHasNumber()) {
+            $.ajax({
+                url: 'db.php',
+                type: "POST",
+                data: {
+                    "function": "add_number_claiming",
+                    "number": $("#number-add").val(),
+                    "from_location": $("#from-location").val(),
+                    "to_location": $("#to-location").val(),
+                    "date": $("#date").val(),
+                    "note_number": $("#note-number").val()
+                }
+            }).done(function(results) {
+                location.reload();
+            });
+        }
+    }
+});
+
+function validateNumber() {
+    if ($("#number").val() == "") {
+        $("#form-number-add").addClass("has-error");
+    }
+    return !$("#form-number-add").hasClass("has-error");
+}
+
+function checkHasNumber() {
+    $.ajax({
+        url: 'db.php',
+        type: "POST",
+        dataType: "json",
+        data: {
+            "function": "check_has_number_claiming",
+            "number": $("#number").val()
+        }
+    }).done(function(results) {
+        if (results[0].count > 0) {
+            $("#form-number-add").addClass("has-error");
+            $("#error-number").text("เลขที่หนังสือส่งซ้ำ");
+            return false;
+        }
+        else {
+            $("#form-number-add").removeClass("has-error");
+            $("#error-number").text("");
+            return true;
+        }
+    });
+}
+
+
+
+$("#sn").on("blur change", checkSnAvailableForClaim);
+$("#sn").on('keyup', function() {
+    $("#form-sn").removeClass("has-error");
+    if (event.which === 13) {
+        checkSnAvailableForClaim();
+    }
+});
+
+$("#submit-button").click(function() {
+    if (validate()) {
+        if (!checkSnAvailableForClaim()) {
+            $.ajax({
+                url: 'db.php',
+                type: "POST",
+                data: {
+                    "function": "claim",
+                    "number": $("#number text").text(),
+                    "sn": $("#sn").val(),
+                    "note": $("#note").val()
+                }
+            }).done(function(results) {
+                location.reload();
+            });
+        }
+    }
+});
+
+function validate() {
+    if ($("#number text").text() == "เลือกเลขที่หนังสือส่ง") {
+        $("#form-number").addClass("has-error");
+    }
+    if ($("#sn").val() == "") {
+        $("#form-sn").addClass("has-error");
+    }
+    return !$("#form-sn").hasClass("has-error") && !$("#form-number").hasClass("has-error");
+}
+
+function checkSnAvailableForClaim() {
+    $.ajax({
+        url: 'db.php',
+        type: "POST",
+        dataType: "json",
+        data: {
+            "function": "check_sn_available_for_claim",
+            "sn": $("#sn").val()
+        }
+    }).done(function(results) {
+        if (results[0].count == 0) {
+            $("#form-sn").addClass("has-error");
+            $("#error-sn").text("S/N ไม่พร้อมส่งซ่อม หรือไม่มีอยู่ในระบบ");
+            return false;
+        }
+        else {
+            $("#form-sn").removeClass("has-error");
+            $("#error-sn").text("");
+            return true;
+        }
+    });
+}
 
 </script>

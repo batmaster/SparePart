@@ -160,5 +160,88 @@
 
 <script type="text/javascript">
 
+$(document).ready(function() {
+    getBrands();
+    $("#search-button").click();
+});
+
+function getBrands() {
+    $.ajax({
+        url: 'db.php',
+        type: "POST",
+        dataType: "json",
+        data: {
+            "function": "get_search_brands"
+        }
+    }).done(function(results) {
+        $("#brand-dropdown").empty();
+        $("#brand-dropdown").append("<li><a href=\"#\">All</a></li>");
+
+        for (var i = 0; i < results.length; i++) {
+            $("#brand-dropdown").append("<li><a href=\"#\">" + results[i].brand + "</a></li>");
+        }
+
+        $("#brand-dropdown li").click(function() {
+            $("#brand text").text($(this).text());
+            $("#model text").text("All");
+            $("#type text").text("All");
+
+            getModels();
+            getTypes();
+        });
+    });
+}
+
+function getModels() {
+    $.ajax({
+        url: 'db.php',
+        type: "POST",
+        dataType: "json",
+        data: {
+            "function": "get_search_models",
+            "brand": $("#brand text").text()
+        }
+    }).done(function(results) {
+        $("#model-dropdown").empty();
+        $("#model-dropdown").append("<li><a href=\"#\">All</a></li>");
+
+        for (var i = 0; i < results.length; i++) {
+            $("#model-dropdown").append("<li><a href=\"#\">" + results[i].model + "</a></li>");
+        }
+
+        $("#model-dropdown li").click(function() {
+            $("#model text").text($(this).text());
+            $("#type text").text("All");
+
+            getTypes();
+        });
+    });
+}
+
+function getTypes() {
+    $.ajax({
+        url: 'db.php',
+        type: "POST",
+        dataType: "json",
+        data: {
+            "function": "get_search_types",
+            "brand": $("#brand text").text(),
+            "model": $("#model text").text()
+        }
+    }).done(function(results) {
+        $("#type-dropdown").empty();
+        $("#type-dropdown").append("<li><a href=\"#\">All</a></li>");
+
+        for (var i = 0; i < results.length; i++) {
+            $("#type-dropdown").append("<li><a href=\"#\">" + results[i].type + "</a></li>");
+        }
+
+        $("#type-dropdown li").click(function() {
+            $("#type text").text($(this).text());
+            getTypes();
+        });
+    });
+}
+
 
 </script>
