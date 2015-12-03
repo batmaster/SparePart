@@ -46,7 +46,7 @@ if (isset($_POST["function"])) {
         $sql = "INSERT INTO board (brand, model, sn, type, date) VALUES ('$brand', '$model', '$sn', '$type', '$date')";
         mysql_query($sql);
 
-        $sql = "INSERT INTO transaction (number, type, location, date, note) VALUES ('เพิ่มอุปกรณ์', 1, '', '$date', '$note')";
+        $sql = "INSERT INTO transaction (number, type, date, note) VALUES ('เพิ่มอุปกรณ์', 1, '$date', '$note')";
         mysql_query($sql);
 
         $sql = "INSERT INTO transaction_order (board_id, transaction_id) VALUES (
@@ -60,6 +60,7 @@ if (isset($_POST["function"])) {
     else if ($_POST["function"] == "get_instock_summary") {
         $sql = "SELECT b.brand, b.model, COUNT(*) amount FROM board b WHERE
         (SELECT t.type FROM transaction t, transaction_order tor WHERE b.id = tor.board_id AND t.id = tor.transaction_id ORDER BY t.id DESC LIMIT 1) = 1
+        AND b.broken = 0
         GROUP BY b.brand, b.model";
 
         $result = mysql_query($sql);
@@ -73,7 +74,34 @@ if (isset($_POST["function"])) {
     else if ($_POST["function"] == "get_claiming_summary") {
         $sql = "SELECT b.brand, b.model, COUNT(*) amount FROM board b WHERE
         (SELECT t.type FROM transaction t, transaction_order tor WHERE b.id = tor.board_id AND t.id = tor.transaction_id ORDER BY t.id DESC LIMIT 1) = 0
+        AND b.broken = 0
         GROUP BY b.brand, b.model";
+
+        $result = mysql_query($sql);
+        $rows = array();
+        while ($r = mysql_fetch_assoc($result)) {
+            $rows[] = $r;
+        }
+        echo json_encode($rows);
+    }
+
+    else if ($_POST["function"] == "get_transfer_summary") {
+        $sql = "SELECT b.brand, b.model, COUNT(*) amount FROM board b WHERE
+        (SELECT t.type FROM transaction t, transaction_order tor WHERE b.id = tor.board_id AND t.id = tor.transaction_id ORDER BY t.id DESC LIMIT 1) = 2
+        AND b.broken = 0
+        GROUP BY b.brand, b.model";
+
+        $result = mysql_query($sql);
+        $rows = array();
+        while ($r = mysql_fetch_assoc($result)) {
+            $rows[] = $r;
+        }
+        echo json_encode($rows);
+    }
+
+    else if ($_POST["function"] == "get_broken_summary") {
+        $sql = "SELECT b.brand, b.model, COUNT(*) amount FROM board b WHERE
+        b.broken = 1";
 
         $result = mysql_query($sql);
         $rows = array();
@@ -85,7 +113,7 @@ if (isset($_POST["function"])) {
 
     /** CLAIM DEVICE **/
     else if ($_POST["function"] == "get_claiming_number") {
-        $sql = "SELECT DISTINCT number, type, to_location FROM transaction WHERE type = 0 OR type = 2 ORDER BY date DESC";
+        $sql = "SELECT DISTINCT number FROM transaction WHERE type = 0 OR type = 2 ORDER BY date DESC";
 
         $result = mysql_query($sql);
         $rows = array();
@@ -96,7 +124,9 @@ if (isset($_POST["function"])) {
     }
 
     else if ($_POST["function"] == "check_has_number_claiming") {
-        $sql = "SELECT COUNT(*) count FROM transaction WHERE number = '$number' AND type = 0";
+        $number = $_POST["number"];
+
+        $sql = "SELECT COUNT(*) count FROM transaction WHERE number = '$number' AND (type = 0 OR type = 2)";
         $result = mysql_query($sql);
         $rows = array();
         while ($r = mysql_fetch_assoc($result)) {
@@ -121,7 +151,7 @@ if (isset($_POST["function"])) {
         $sn = $_POST["sn"];
 
         $sql = "SELECT b.* FROM board b WHERE
-            (SELECT t.type FROM transaction t, transaction_order tor WHERE b.id = tor.board_id AND t.id = tor.transaction_id ORDER BY t.id DESC LIMIT 1) = 1 AND b.sn = '$sn'";
+            (SELECT t.type FROM transaction t, transaction_order tor WHERE b.id = tor.board_id AND t.id = tor.transaction_id ORDER BY tor.id DESC LIMIT 1) = 1 AND b.sn = '$sn'";
 
         $result = mysql_query($sql);
         $rows = array();
@@ -138,12 +168,75 @@ if (isset($_POST["function"])) {
 
         $sql = "INSERT INTO transaction_order (board_id, transaction_id, note) VALUES (
             (SELECT id FROM board WHERE sn = '$sn'),
-            (SELECT id FROM transaction WHERE number = '$number' AND type = 0),
+            (SELECT id FROM transaction WHERE number = '$number' AND (type = 0 OR type = 2)),
             '$note')";
         mysql_query($sql);
     }
 
+    /** RETRIEVE DEVICE **/
+    else if ($_POST["function"] == "get_retrieve_number") {
+        $sql = "SELECT DISTINCT number FROM transaction WHERE type = 1 AND number != 'เพิ่มอุปกรณ์' ORDER BY date DESC";
 
+        $result = mysql_query($sql);
+        $rows = array();
+        while ($r = mysql_fetch_assoc($result)) {
+            $rows[] = $r;
+        }
+        echo json_encode($rows);
+    }
+
+    else if ($_POST["function"] == "check_has_number_retrieve") {
+        $number = $_POST["number"];
+
+        $sql = "SELECT COUNT(*) count FROM transaction WHERE number = '$number' AND type = 1";
+        $result = mysql_query($sql);
+        $rows = array();
+        while ($r = mysql_fetch_assoc($result)) {
+            $rows[] = $r;
+        }
+        echo json_encode($rows);
+    }
+
+    else if ($_POST["function"] == "add_number_retrive") {
+        $number = $_POST["number"];
+        $date = $_POST["date"];
+        $note_number = $_POST["note_number"];
+
+        $sql = "INSERT INTO transaction (number, type, date, note) VALUES ('$number', 1, '$date', '$note_number')";
+        mysql_query($sql);
+    }
+
+    else if ($_POST["function"] == "check_sn_available_for_retrieve") {
+        $sn = $_POST["sn"];
+
+        $sql = "SELECT b.* FROM board b WHERE
+            (SELECT t.type FROM transaction t, transaction_order tor WHERE b.id = tor.board_id AND t.id = tor.transaction_id ORDER BY tor.id DESC LIMIT 1) = 0 AND b.sn = '$sn'";
+
+        $result = mysql_query($sql);
+        $rows = array();
+        while ($r = mysql_fetch_assoc($result)) {
+            $rows[] = $r;
+        }
+        echo json_encode($rows);
+    }
+
+    else if ($_POST["function"] == "retrieve") {
+        $sn = $_POST["sn"];
+        $number = $_POST["number"];
+        $note = $_POST["note"];
+        $broken = $_POST["broken"];
+
+        $sql = "INSERT INTO transaction_order (board_id, transaction_id, note) VALUES (
+            (SELECT id FROM board WHERE sn = '$sn'),
+            (SELECT id FROM transaction WHERE number = '$number' AND type = 1),
+            '$note')";
+        mysql_query($sql);
+
+        if ($broken == "true") {
+            $sql = "UPDATE board SET broken = 1 WHERE sn = '$sn'";
+            mysql_query($sql);
+        }
+    }
 
     /** SEARCH DEVICE **/
     else if ($_POST["function"] == "get_search_brands") {
@@ -223,6 +316,7 @@ if (isset($_POST["function"])) {
         echo json_encode($rows);
     }
 */
+
 }
 
 ?>

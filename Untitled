@@ -1,0 +1,2 @@
+SELECT b.brand, b.model, b.sn, b.type, t.type status, t.note FROM board b, transaction t WHERE
+            (SELECT t.type FROM transaction_order tor WHERE b.id = tor.board_id AND t.id = tor.transaction_id ORDER BY t.id DESC LIMIT 1) = 1

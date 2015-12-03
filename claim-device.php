@@ -134,6 +134,7 @@
                         </span>
                         <input type="text"class="form-control" id="date">
                     </div>
+                    <div class="filthypillow" id="calendar"></div>
                 </div>
 
                 <div class="form-group" id="form-note-number">
@@ -186,6 +187,26 @@ $(document).ready(function() {
             $("#form-number").removeClass("has-error");
         });
     });
+
+    var now = moment().subtract("seconds", 1);
+    $("#date").val(now.format("YYYY-MM-DD HH:mm"));
+});
+
+$("#calendar").filthypillow({
+    calendar: {
+        saveOnDateSelect: false,
+        isPinned: true
+    },
+    exitOnBackgroundClick: false
+});
+
+$("#calendar").on("fp:save", function(e, dateObj) {
+    $("#date").val(dateObj.format("YYYY-MM-DD HH:mm"));
+    $("#calendar").filthypillow("hide");
+});
+
+$("#date").on("focus", function() {
+    $("#calendar").filthypillow("show");
 });
 
 $("#number-add").on("blur change", checkHasNumber);
@@ -232,7 +253,7 @@ function checkHasNumber() {
         dataType: "json",
         data: {
             "function": "check_has_number_claiming",
-            "number": $("#number").val()
+            "number": $("#number-add").val()
         }
     }).done(function(results) {
         if (results[0].count > 0) {
@@ -271,6 +292,7 @@ $("#submit-button").click(function() {
                     "note": $("#note").val()
                 }
             }).done(function(results) {
+                // console.log(results);
                 location.reload();
             });
         }
