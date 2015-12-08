@@ -284,30 +284,49 @@ if (isset($_POST["function"])) {
         }
         echo json_encode($rows);
     }
-/*
-    else if ($_POST["function"] == "search") {
+
+    /*else if ($_POST["function"] == "search") {
         $brand = $_POST["brand"];
         $model = $_POST["model"];
         $type = $_POST["type"];
         $status = $_POST["status"];
 
-        if ($brand == "All")
+        if ($brand == "ทั้งหมด")
         $brand = "";
-        if ($model == "All")
+        if ($model == "ทั้งหมด")
         $model = "";
-        if ($type == "All")
+        if ($type == "ทั้งหมด")
         $type = "";
 
-        if ($status == "Claiming")
-            $sql = "SELECT b.brand, b.model, b.sn, b.type, t.type status, t.note FROM board b WHERE
-            (SELECT t.type FROM transaction t, transaction_order tor WHERE b.id = tor.board_id AND t.id = tor.transaction_id ORDER BY t.id DESC LIMIT 1) = 0;
+        if ($status == "ในคลังและส่งซ่อม")
+            $sql = "SELECT b.brand, b.model, b.sn, b.type, t.type status, t.note FROM board b, transaction t WHERE
+                ((SELECT t.type FROM transaction_order tor WHERE b.id = tor.board_id AND t.id = tor.transaction_id ORDER BY tor.id DESC LIMIT 1) = 1 OR
+                (SELECT t.type FROM transaction_order tor WHERE b.id = tor.board_id AND t.id = tor.transaction_id ORDER BY tor.id DESC LIMIT 1) = 0)";
 
-            $sql = "SELECT b.*,
-            (SELECT CASE t.type WHEN 0 THEN 'Claiming' ELSE 'In stock' END FROM transaction t WHERE t.board_id=b.id ORDER BY date DESC LIMIT 1) status FROM board b WHERE b.brand LIKE '%$brand%' AND b.model LIKE '%$model%' AND b.type LIKE '%$type%' AND (SELECT t.type FROM transaction t WHERE t.board_id=b.id ORDER BY date DESC LIMIT 1)=0";
-        else if ($status == "In stock")
-            $sql = "SELECT b.*, (SELECT CASE t.type WHEN 0 THEN 'Claiming' ELSE 'In stock' END FROM transaction t WHERE t.board_id=b.id ORDER BY date DESC LIMIT 1) status FROM board b WHERE b.brand LIKE '%$brand%' AND b.model LIKE '%$model%' AND b.type LIKE '%$type%' AND (SELECT t.type FROM transaction t WHERE t.board_id=b.id ORDER BY date DESC LIMIT 1)=1";
-        else
-            $sql = "SELECT b.*, (SELECT CASE t.type WHEN 0 THEN 'Claiming' ELSE 'In stock' END FROM transaction t WHERE t.board_id=b.id ORDER BY date DESC LIMIT 1) status FROM board b WHERE b.brand LIKE '%$brand%' AND b.model LIKE '%$model%' AND b.type LIKE '%$type%'";
+        else if ($status == "ในคลัง")
+
+        else if ($status == "ส่งซ่อม")
+
+        else if ($status == "ส่งโอน")
+
+        else if ($status == "เสียโดยสิ้นเชิง")
+
+
+        $result = mysql_query($sql);
+        $rows = array();
+        while ($r = mysql_fetch_assoc($result)) {
+            $rows[] = $r;
+        }
+        echo json_encode($rows);
+    }*/
+
+    /** NUMBER REPORT **/
+    else if ($_POST["function"] == "number_search") {
+        $number = $_POST["number"];
+        $date_from = $_POST["date_from"];
+        $date_to = $_POST["date_to"];
+
+        $sql = "SELECT t.number, t.type, (SELECT COUNT(*) FROM transaction_order tor WHERE t.id = tor.transaction_id) amount, t.date, t.note FROM transaction t WHERE number != 'เพิ่มอุปกรณ์' GROUP BY t.number ORDER BY t.date";
         $result = mysql_query($sql);
         $rows = array();
         while ($r = mysql_fetch_assoc($result)) {
@@ -315,7 +334,32 @@ if (isset($_POST["function"])) {
         }
         echo json_encode($rows);
     }
-*/
+
+    /** NUMBER REPORT SUMMARY **/
+    else if ($_POST["function"] == "number_summary") {
+        $number = $_POST["number"];
+
+        $sql = "SELECT b.brand, b.model, COUNT(*) amount FROM board b, transaction t, transaction_order tor WHERE t.number = '$number' AND b.id = tor.board_id AND t.id = tor.transaction_id GROUP BY b.brand, b.model";
+        $result = mysql_query($sql);
+        $rows = array();
+        while ($r = mysql_fetch_assoc($result)) {
+            $rows[] = $r;
+        }
+        echo json_encode($rows);
+    }
+
+    else if ($_POST["function"] == "number_detail") {
+        $number = $_POST["number"];
+
+        $sql = "SELECT b.brand, b.model, tor.note FROM board b, transaction t, transaction_order tor WHERE t.number = '$number' AND b.id = tor.board_id AND t.id = tor.transaction_id";
+        $result = mysql_query($sql);
+        $rows = array();
+        while ($r = mysql_fetch_assoc($result)) {
+            $rows[] = $r;
+        }
+        echo json_encode($rows);
+    }
+
 
 }
 

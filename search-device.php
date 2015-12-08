@@ -5,11 +5,11 @@
             <label>ยี่ห้อ</label>
             <div class="dropdown">
                 <button class="btn btn-default dropdown-toggle" type="button" id="brand" data-toggle="dropdown" style="width: 100%">
-                    <text>All</text>
+                    <text>ทั้งหมด</text>
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id="brand-dropdown" style="width: 100%">
-                    <li><a href="#">All</a></li>
+                    <li><a href="#">ทั้งหมด</a></li>
                 </ul>
             </div>
         </div>
@@ -18,11 +18,11 @@
             <label>ชื่ออุปกรณ์</label>
             <div class="dropdown">
                 <button class="btn btn-default dropdown-toggle" type="button" id="model" data-toggle="dropdown" style="width: 100%">
-                    <text>All</text>
+                    <text>ทั้งหมด</text>
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id="model-dropdown" style="width: 100%">
-                    <li><a href="#">All</a></li>
+                    <li><a href="#">ทั้งหมด</a></li>
                 </ul>
             </div>
         </div>
@@ -33,11 +33,11 @@
             <label>ประเภทการใช้งาน</label>
             <div class="dropdown">
                 <button class="btn btn-default dropdown-toggle" type="button" id="type" data-toggle="dropdown" style="width: 100%">
-                    <text>All</text>
+                    <text>ทั้งหมด</text>
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id="type-dropdown" style="width: 100%">
-                    <li><a href="#">All</a></li>
+                    <li><a href="#">ทั้งหมด</a></li>
                 </ul>
             </div>
         </div>
@@ -46,13 +46,17 @@
             <label>สถานะ</label>
             <div class="dropdown">
                 <button class="btn btn-default dropdown-toggle" type="button" id="status" data-toggle="dropdown" style="width: 100%">
-                    <text>All</text>
+                    <text>ในคลังและส่งซ่อม</text>
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id="status-dropdown" style="width: 100%">
-                    <li><a href="#">All</a></li>
-                    <li><a href="#">In stock</a></li>
-                    <li><a href="#">Claiming</a></li>
+                    <li><a href="#">ในคลังและส่งซ่อม</a></li>
+                    <li><a href="#">ในคลัง</a></li>
+                    <li><a href="#">ส่งซ่อม</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#">ส่งโอน</a></li>
+                    <li class="divider"></li>
+                    <li><a href="#">เสียโดยสิ้นเชิง</a></li>
                 </ul>
             </div>
         </div>
@@ -85,12 +89,12 @@
         </table>
     </div>
 
-    <div class="modal fade" id="detail-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal fade" id="detail-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModทั้งหมดabel">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                    <h4 class="modal-title" id="exampleModalLabel">New message</h4>
+                    <h4 class="modal-title" id="exampleModทั้งหมดabel">New message</h4>
                 </div>
                 <div class="modal-body">
                     <label class="control-label" id="brand">Brand:</label>
@@ -133,7 +137,7 @@
         </div>
     </div>
 
-    <div class="modal fade" id="confirm-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal fade" id="confirm-modal" tabindex="-1" role="dialog" aria-labelledby="myModทั้งหมดabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -153,10 +157,7 @@
 </div>
 
 
-
-
-
-</div>
+<div value="ss" id="sd"></div>
 
 <script type="text/javascript">
 
@@ -175,7 +176,7 @@ function getBrands() {
         }
     }).done(function(results) {
         $("#brand-dropdown").empty();
-        $("#brand-dropdown").append("<li><a href=\"#\">All</a></li>");
+        $("#brand-dropdown").append("<li><a href=\"#\">ทั้งหมด</a></li>");
 
         for (var i = 0; i < results.length; i++) {
             $("#brand-dropdown").append("<li><a href=\"#\">" + results[i].brand + "</a></li>");
@@ -183,8 +184,8 @@ function getBrands() {
 
         $("#brand-dropdown li").click(function() {
             $("#brand text").text($(this).text());
-            $("#model text").text("All");
-            $("#type text").text("All");
+            $("#model text").text("ทั้งหมด");
+            $("#type text").text("ทั้งหมด");
 
             getModels();
             getTypes();
@@ -203,7 +204,7 @@ function getModels() {
         }
     }).done(function(results) {
         $("#model-dropdown").empty();
-        $("#model-dropdown").append("<li><a href=\"#\">All</a></li>");
+        $("#model-dropdown").append("<li><a href=\"#\">ทั้งหมด</a></li>");
 
         for (var i = 0; i < results.length; i++) {
             $("#model-dropdown").append("<li><a href=\"#\">" + results[i].model + "</a></li>");
@@ -211,7 +212,7 @@ function getModels() {
 
         $("#model-dropdown li").click(function() {
             $("#model text").text($(this).text());
-            $("#type text").text("All");
+            $("#type text").text("ทั้งหมด");
 
             getTypes();
         });
@@ -230,7 +231,7 @@ function getTypes() {
         }
     }).done(function(results) {
         $("#type-dropdown").empty();
-        $("#type-dropdown").append("<li><a href=\"#\">All</a></li>");
+        $("#type-dropdown").append("<li><a href=\"#\">ทั้งหมด</a></li>");
 
         for (var i = 0; i < results.length; i++) {
             $("#type-dropdown").append("<li><a href=\"#\">" + results[i].type + "</a></li>");
@@ -242,6 +243,32 @@ function getTypes() {
         });
     });
 }
+
+$("#status-dropdown li").click(function() {
+    $("#status text").text($(this).text());
+});
+
+$("#clear-button").click(function() {
+    location.reload();
+});
+
+$("#search-button").click(function() {
+    $.ajax({
+        url: 'db.php',
+        type: "POST",
+        dataType: "json",
+        data: {
+            "function": "search",
+            "brand": $("#brand text").text(),
+            "model": $("#model text").text(),
+            "type": $("#type text").text(),
+            "status": $("#status text").text()
+        }
+    }).done(function(results) {
+        console.log(results);
+        // $("#table-body-modal").append("<tr><th>" + (i+1) + "</th><td>" + results[i].brand + "</td><td>" + results[i].model + "</td><td>" + results[i].amount + "</td></tr>");
+    });
+});
 
 
 </script>

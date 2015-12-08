@@ -54,6 +54,7 @@
                     <th>ประเภท</th>
                     <th>จำนวนอุปกรณ์</th>
                     <th>วันที่</th>
+                    <th>หมายเหตุ</th>
                 </tr>
             </thead>
             <tbody id="table-body-number">
@@ -61,11 +62,83 @@
             </tbody>
         </table>
     </div>
+</div>
 
+<div class="modal fade" id="number-modal" tabindex="-1" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">New message</h4>
+            </div>
+            <div class="modal-body">
+                <label class="control-label" id="brand">Brand:</label>
+                <label class="control-label" id="model">Model:</label>
+                <label class="control-label" id="sn">S/N:</label>
+                <label class="control-label" id="type">Type:</label>
+                <label class="control-label" id="date-added">Date added:</label>
+
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>วันที่</th>
+                            <th>เลขที่หนังสือ</th>
+                            <th>สถานที่ส่งเคลม</th>
+                            <th>ประเภท</th>
+                            <th>หมายเหตุ</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body-modal">
+
+                    </tbody>
+                </table>
+
+                <div class="btn-group btn-outline">
+                    <button type="button" class="btn btn-info" id="edit-button"><span class="glyphicon glyphicon-pencil"></span> แก้ไขรายละเอียดบอร์ด</button>
+                </div>
+
+                <div class="btn-group btn-outline">
+                    <a href="#" data-toggle="modal" data-target="#confirm-modal" id="ahref">
+                        <button type="button" class="btn btn-danger" id="broken-button"><span class="glyphicon glyphicon-trash"></span> แจ้งเสียโดยชิ้นเชิง</button>
+                    </a>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
 </div>
 
 
 <script type="text/javascript">
+
+$(document).ready(function() {
+    $("#search-button").click();
+});
+
+$("#search-button").click(function() {
+    $.ajax({
+        url: 'db.php',
+        type: "POST",
+        dataType: "json",
+        data: {
+            "function": "number_search",
+            "number": $("#number").val(),
+            "date_from": $("#date-from").val(),
+            "date_to": $("#date-to").val()
+        }
+    }).done(function(results) {
+        console.log(results);
+        $("#table-body").empty();
+        for (var i = 0; i < results.length; i++) {
+            $("#table-body-number").append("<tr><th>" + (i+1) + "</th><td><a href=\"?page=number-report-summary&number=" + results[i].number + "\">" + results[i].number + "</a></td><td>" + (results[i].type == 0 ? "ส่งซ่อม" : (results[i].type == 1 ? "รับคืน" : "ส่งโอน")) + "</td><td>" + results[i].amount + "</td><td>" + results[i].date + "</td><td>" + results[i].note + "</td></tr>");
+        }
+    });
+});
+
 
 
 
