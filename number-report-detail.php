@@ -8,6 +8,7 @@
                     <th>#</th>
                     <th>Brand</th>
                     <th>Model</th>
+                    <th>S/N</th>
                     <th>Note</th>
                 </tr>
             </thead>
@@ -37,7 +38,7 @@ $(document).ready(function() {
         }
 
         for (var i = 0; i < results.length; i++) {
-            $("#table-body").append("<tr><th>" + (i+1) + "</th><td>" + results[i].brand + "</td><td>" + results[i].model + "</td><td>" + results[i].note + "</td></tr>");
+            $("#table-body").append("<tr><th>" + (i+1) + "</th><td>" + results[i].brand + "</td><td>" + results[i].sn + "</td><td>" + results[i].model + "</td><td>" + results[i].note + "</td></tr>");
         }
     });
 });

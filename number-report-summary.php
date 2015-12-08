@@ -16,6 +16,9 @@
             </tbody>
         </table>
     </div>
+    <div class="btn-group btn-outline">
+        <button type="button" class="btn btn-info" onclick="location.href='<?php echo "?page=number-report-detail&number=" .$_GET["number"]; ?>'"><span class="glyphicon glyphicon-search"></span> ค้นหา</button>
+    </div>
 </div>
 
 <script type="text/javascript">

@@ -325,8 +325,10 @@ if (isset($_POST["function"])) {
         $number = $_POST["number"];
         $date_from = $_POST["date_from"];
         $date_to = $_POST["date_to"];
+        $mode = $_POST["mode"];
+        $where = $mode == 0 ? " AND number LIKE '%$number%' " : " AND '$date_from' <= date AND date <= '$date_to' ";
 
-        $sql = "SELECT t.number, t.type, (SELECT COUNT(*) FROM transaction_order tor WHERE t.id = tor.transaction_id) amount, t.date, t.note FROM transaction t WHERE number != 'เพิ่มอุปกรณ์' GROUP BY t.number ORDER BY t.date";
+        $sql = "SELECT t.number, t.type, (SELECT COUNT(*) FROM transaction_order tor WHERE t.id = tor.transaction_id) amount, t.date, t.note FROM transaction t WHERE number != 'เพิ่มอุปกรณ์' $where GROUP BY t.number ORDER BY t.date";
         $result = mysql_query($sql);
         $rows = array();
         while ($r = mysql_fetch_assoc($result)) {
@@ -351,7 +353,7 @@ if (isset($_POST["function"])) {
     else if ($_POST["function"] == "number_detail") {
         $number = $_POST["number"];
 
-        $sql = "SELECT b.brand, b.model, tor.note FROM board b, transaction t, transaction_order tor WHERE t.number = '$number' AND b.id = tor.board_id AND t.id = tor.transaction_id";
+        $sql = "SELECT b.brand, b.model, b.sn, tor.note FROM board b, transaction t, transaction_order tor WHERE t.number = '$number' AND b.id = tor.board_id AND t.id = tor.transaction_id";
         $result = mysql_query($sql);
         $rows = array();
         while ($r = mysql_fetch_assoc($result)) {

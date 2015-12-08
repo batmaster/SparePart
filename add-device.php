@@ -118,6 +118,10 @@ $("#calendar").on("fp:save", function(e, dateObj) {
     $("#calendar").filthypillow("hide");
 });
 
+$("#date").on("focus", function() {
+    $("#calendar").filthypillow("show");
+});
+
 $("#model").keyup(function() {
     $("#form-model").removeClass("has-error");
     $.ajax({
@@ -205,10 +209,6 @@ function checkHasSn() {
         }
     });
 }
-
-$("#date").on("focus", function() {
-    $("#calendar").filthypillow("show");
-});
 
 $("#brand-dropdown li").click(function() {
     $("#brand text").text($(this).text());
