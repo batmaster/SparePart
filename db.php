@@ -340,6 +340,30 @@ if (isset($_POST["function"])) {
                 // echo $sql;
             }
 
+            else if ($_POST["function"] == "get_sn_description") {
+                $sn = $_POST["sn"];
+
+                $sql = "SELECT * FROM board WHERE sn = '$sn'";
+                $result = mysql_query($sql);
+                $rows = array();
+                while ($r = mysql_fetch_assoc($result)) {
+                    $rows[] = $r;
+                }
+                echo json_encode($rows);
+            }
+
+            else if ($_POST["function"] == "get_sn_transactions") {
+                $sn = $_POST["sn"];
+
+                $sql = "SELECT t.date, t.number, t.type, t.from_location, t.to_location, tor.note FROM board b, transaction t, transaction_order tor WHERE b.sn = '$sn' AND b.id = tor.board_id AND t.id = tor.transaction_id ORDER BY t.date";
+                $result = mysql_query($sql);
+                $rows = array();
+                while ($r = mysql_fetch_assoc($result)) {
+                    $rows[] = $r;
+                }
+                echo json_encode($rows);
+            }
+
             /** NUMBER REPORT **/
             else if ($_POST["function"] == "number_search") {
                 $number = $_POST["number"];
@@ -358,7 +382,19 @@ if (isset($_POST["function"])) {
             }
 
             /** NUMBER REPORT SUMMARY **/
-            else if ($_POST["function"] == "number_summary") {
+            else if ($_POST["function"] == "get_number_description") {
+                $number = $_POST["number"];
+
+                $sql = "SELECT * FROM transaction WHERE number = '$number'";
+                $result = mysql_query($sql);
+                $rows = array();
+                while ($r = mysql_fetch_assoc($result)) {
+                    $rows[] = $r;
+                }
+                echo json_encode($rows);
+            }
+
+            else if ($_POST["function"] == "get_number_summary") {
                 $number = $_POST["number"];
 
                 $sql = "SELECT b.brand, b.model, COUNT(*) amount FROM board b, transaction t, transaction_order tor WHERE t.number = '$number' AND b.id = tor.board_id AND t.id = tor.transaction_id GROUP BY b.brand, b.model";
@@ -370,7 +406,7 @@ if (isset($_POST["function"])) {
                 echo json_encode($rows);
             }
 
-            else if ($_POST["function"] == "number_detail") {
+            else if ($_POST["function"] == "get_number_detail") {
                 $number = $_POST["number"];
 
                 $sql = "SELECT b.brand, b.model, b.sn, tor.note FROM board b, transaction t, transaction_order tor WHERE t.number = '$number' AND b.id = tor.board_id AND t.id = tor.transaction_id";

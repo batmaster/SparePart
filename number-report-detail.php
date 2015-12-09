@@ -27,7 +27,7 @@ $(document).ready(function() {
         type: "POST",
         dataType: 'json',
         data: {
-            "function": "number_detail",
+            "function": "get_number_detail",
             "number": "<?php echo $_GET["number"] ?>"
         }
     }).done(function(results) {

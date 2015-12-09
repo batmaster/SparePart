@@ -89,7 +89,7 @@
         </table>
     </div>
 
-    <div class="modal fade" id="detail-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModทั้งหมดabel">
+    <div class="modal fade" id="detail-modal" tabindex="-1" role="dialog">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -97,19 +97,19 @@
                     <h4 class="modal-title" id="exampleModทั้งหมดabel">New message</h4>
                 </div>
                 <div class="modal-body">
-                    <label class="control-label" id="brand">Brand:</label>
-                    <label class="control-label" id="model">Model:</label>
-                    <label class="control-label" id="sn">S/N:</label>
-                    <label class="control-label" id="type">Type:</label>
-                    <label class="control-label" id="date-added">Date added:</label>
+                    <p id="brand">Brand:</p>
+                    <p id="model">Model:</p>
+                    <p id="sn">S/N:</p>
+                    <p id="type">Type:</p>
+                    <p id="date-added">Date added:</p>
 
                     <table class="table table-bordered">
                         <thead>
                             <tr>
                                 <th>วันที่</th>
                                 <th>เลขที่หนังสือ</th>
-                                <th>สถานที่ส่งเคลม</th>
                                 <th>ประเภท</th>
+                                <th>เพิ่มเติม</th>
                                 <th>หมายเหตุ</th>
                                 <th></th>
                             </tr>
@@ -123,12 +123,6 @@
                         <button type="button" class="btn btn-info" id="edit-button"><span class="glyphicon glyphicon-pencil"></span> แก้ไขรายละเอียดบอร์ด</button>
                     </div>
 
-                    <div class="btn-group btn-outline">
-                        <a href="#" data-toggle="modal" data-target="#confirm-modal" id="ahref">
-                            <button type="button" class="btn btn-danger" id="broken-button"><span class="glyphicon glyphicon-trash"></span> แจ้งเสียโดยชิ้นเชิง</button>
-                        </a>
-                    </div>
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
@@ -136,28 +130,7 @@
             </div>
         </div>
     </div>
-
-    <div class="modal fade" id="confirm-modal" tabindex="-1" role="dialog" aria-labelledby="myModทั้งหมดabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    ยืนยันการแจ้งเสียโดยสิ้นเชิง
-                </div>
-                <div class="modal-body">
-                    หมายเลข  จะไม่สามารถนำกลับมาใช้ได้อีก
-                    ยืนยัน?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">ยกเลิก</button>
-                    <a class="btn btn-danger btn-ok">ยืนยัน</a>
-                </div>
-            </div>
-        </div>
-    </div>
 </div>
-
-
-<div value="ss" id="sd"></div>
 
 <script type="text/javascript">
 
@@ -276,11 +249,53 @@ $("#search-button").click(function() {
         }
 
         for (var i = 0; i < results.length; i++) {
-            $("#table-body").append("<tr><th>" + (i+1) + "</th><td>" + results[i].brand + "</td><td>" + results[i].model + "</td><td>" + results[i].sn + "</td><td>" + results[i].type + "</td><td>" + results[i].status + "</td><td>" +
+            $("#table-body").append("<tr><th>" + (i+1) + "</th><td>" + results[i].brand + "</td><td>" + results[i].model + "</td><td><a href=\"#\" data-toggle=\"modal\" data-target=\"#detail-modal\" data-sn=\"" + results[i].sn + "\">" + results[i].sn + "</a></td><td>" + results[i].type + "</td><td>" + results[i].status + "</td><td>" +
             results[i].note + "</td><td>" + results[i].model + "</td></tr>");
         }
     });
 });
+
+$("#detail-modal").on("show.bs.modal", function (event) {
+        var button = $(event.relatedTarget);
+        var sn = button.data('sn');
+
+        var modal = $(this);
+        modal.find('.modal-title').text('S/N ' + sn);
+
+        $.ajax({
+            url: 'db.php',
+            type: "POST",
+            dataType: 'json',
+            data: {
+                "function": "get_sn_description",
+                "sn": sn
+            }
+        }).done(function(results) {
+            modal.find('.modal-body #brand').text("Brand: " + results[0].brand);
+            modal.find('.modal-body #model').text("Model: " + results[0].model);
+            modal.find('.modal-body #sn').text("S/N: " + results[0].sn);
+            modal.find('.modal-body #type').text("Type: " + results[0].type);
+            modal.find('.modal-body #date-added').text("Date added: " + results[0].date);
+
+            modal.find("#ahref").data("sn", sn);
+        });
+
+        $.ajax({
+            url: 'db.php',
+            type: "POST",
+            dataType: 'json',
+            data: {
+                "function": "get_sn_transactions",
+                "sn": sn
+            }
+        }).done(function(results) {
+            $("#table-body-modal").empty();
+            for (var i = 0; i < results.length; i++) {
+                $("#table-body-modal").append("<tr " + (results[i].type == 0 ? "class=\"info\"" : (results[i].type == 1 ? "class=\"success\"" : "class=\"danger\"")) + "><td>" + results[i].date + "</td><td>" + results[i].number + "</td><td>" +
+                (results[i].location == null ? "" : results[i].location) + "</td><td>" + (results[i].type == 0 ? "ส่งซ่อม" : (results[i].type == 1 ? "รับคืน" : "ส่งโอน")) + "</td><td>" + results[i].note + "</td></tr>");
+            }
+        });
+    });
 
 
 </script>
