@@ -86,7 +86,7 @@
                 </ul>
                 <ul class="nav nav-sidebar">
                     <li <?php if ($_GET["page"] == "number-report" || $_GET["page"] == "board-list-report") echo 'class="active"';?>><a href="?page=number-report">รายงานเลขที่หนังสือรับส่ง</a></li>
-                    <li <?php if ($_GET["page"] == "monthly-report") echo 'class="active"';?>><a href="?page=monthly-report">รายงานผลรายเดือน</a></li>
+                    <li <?php if ($_GET["page"] == "monthly-report") echo 'class="active"';?>><a href="?page=monthly-report">#รายงานผลรายเดือน</a></li>
                 </ul>
                 <ul class="nav nav-sidebar">
                     <li <?php if ($_GET["page"] == "info") echo 'class="active"';?>><a href="?page=info">#ข้อมูลเพิ่มเติม</a></li>
