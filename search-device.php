@@ -8,7 +8,7 @@
                     <text>ทั้งหมด</text>
                     <span class="caret"></span>
                 </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id="brand-dropdown" style="width: 100%">
+                <ul class="dropdown-menu" id="brand-dropdown" style="width: 100%">
                     <li><a href="#">ทั้งหมด</a></li>
                 </ul>
             </div>
@@ -21,7 +21,7 @@
                     <text>ทั้งหมด</text>
                     <span class="caret"></span>
                 </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id="model-dropdown" style="width: 100%">
+                <ul class="dropdown-menu" id="model-dropdown" style="width: 100%">
                     <li><a href="#">ทั้งหมด</a></li>
                 </ul>
             </div>
@@ -36,7 +36,7 @@
                     <text>ทั้งหมด</text>
                     <span class="caret"></span>
                 </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id="type-dropdown" style="width: 100%">
+                <ul class="dropdown-menu" id="type-dropdown" style="width: 100%">
                     <li><a href="#">ทั้งหมด</a></li>
                 </ul>
             </div>
@@ -49,7 +49,7 @@
                     <text>ในคลังและส่งซ่อม</text>
                     <span class="caret"></span>
                 </button>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenu1" id="status-dropdown" style="width: 100%">
+                <ul class="dropdown-menu" id="status-dropdown" style="width: 100%">
                     <li><a href="#">ในคลังและส่งซ่อม</a></li>
                     <li><a href="#">ในคลัง</a></li>
                     <li><a href="#">ส่งซ่อม</a></li>
@@ -163,6 +163,9 @@
 
 $(document).ready(function() {
     getBrands();
+    getModels();
+    getTypes();
+
     $("#search-button").click();
 });
 
@@ -265,8 +268,17 @@ $("#search-button").click(function() {
             "status": $("#status text").text()
         }
     }).done(function(results) {
-        console.log(results);
-        // $("#table-body-modal").append("<tr><th>" + (i+1) + "</th><td>" + results[i].brand + "</td><td>" + results[i].model + "</td><td>" + results[i].amount + "</td></tr>");
+        // console.log(results);
+        $("#table-body").empty();
+
+        if (results.length == 0) {
+            $("#table-body").append("<tr><th></th><td>ไม่พบ!</td><td></td><td></td><td></td><td></td><td></td><td></td></tr>");
+        }
+
+        for (var i = 0; i < results.length; i++) {
+            $("#table-body").append("<tr><th>" + (i+1) + "</th><td>" + results[i].brand + "</td><td>" + results[i].model + "</td><td>" + results[i].sn + "</td><td>" + results[i].type + "</td><td>" + results[i].status + "</td><td>" +
+            results[i].note + "</td><td>" + results[i].model + "</td></tr>");
+        }
     });
 });
 
