@@ -8,6 +8,7 @@ mysql_select_db($dbname, $conn); // เลือกฐานข้อมูล
 mysql_query("SET NAMES utf8"); // กำหนด charset ให้ฐานข้อมูล เพื่ออ่านภาษาไทย
 
 
+
 if (isset($_POST["function"])) {
 
     /** ADD DEVICE **/
