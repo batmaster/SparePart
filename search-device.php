@@ -250,7 +250,7 @@ $("#search-button").click(function() {
 
         for (var i = 0; i < results.length; i++) {
             $("#table-body").append("<tr><th>" + (i+1) + "</th><td>" + results[i].brand + "</td><td>" + results[i].model + "</td><td><a href=\"#\" data-toggle=\"modal\" data-target=\"#detail-modal\" data-sn=\"" + results[i].sn + "\">" + results[i].sn + "</a></td><td>" +
-            (results[i].type == 0 ? "ส่งซ่อม" : (results[i].type == 1 ? "ในคลัง" : "ส่งโอน")) + "</td><td>" + results[i].status + "</td><td>" +
+            (results[i].status == 0 ? "ส่งซ่อม" : (results[i].status == 1 ? "ในคลัง" : "ส่งโอน")) + "</td><td>" + results[i].status + "</td><td>" +
             results[i].note + "</td><td>" + results[i].model + "</td></tr>");
         }
     });
